@@ -12,12 +12,17 @@ Privacy-first workspace for solo therapists with client-controlled, time-limited
 | Item | Link |
 |---|---|
 | Live Demo | https://mindvault-one-lemon.vercel.app/ |
+| Demo Video | https://drive.google.com/file/d/1Wewc7kVyMPaF-JoP5jRjr8A74q3AxaOc/view?usp=sharing |
 | Deployed Contract | https://amoy.polygonscan.com/address/0x5d721854efe4916607f3ea57a4d2afc603df046f |
 | Contract Address | `0x5d721854efe4916607f3ea57a4d2afc603df046f` |
 | Network | Polygon Amoy Testnet |
 | Chain ID | 80002 |
 
 > ⚠️ **Hackathon Prototype:** MindVault is not production healthcare software. No therapy notes, diagnoses, client names, contact details, or raw medical files are stored on-chain. The smart contract stores only record references/hashes, consent status, expiry, session status, and audit events. Payment requests are Demo Mode only.
+
+## 🎥 Demo Video
+
+[Watch the MindVault demo video](https://drive.google.com/file/d/1Wewc7kVyMPaF-JoP5jRjr8A74q3AxaOc/view?usp=sharing)
 
 ## Problem
 

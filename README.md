@@ -178,6 +178,14 @@ See [test-checklist.md](test-checklist.md) for the full manual test plan using t
 - [ ] Contract address and transaction hashes are displayed as blockchain proof
 - [ ] Demo Mode items (appointments, encrypted record view, payment request) are clearly labeled simulations
 
+## 📚 Documentation
+
+- [Architecture](docs/architecture.md) — Roles, stack, on-chain vs off-chain, consent lifecycle, ASCII diagram
+- [Demo Script](docs/demo-script.md) — 2-minute live demo script with speaker notes
+- [Deployment Guide](docs/deployment-guide.md) — Remix, Polygon Amoy, Vercel, PolygonScan verification
+- [Security Limitations](docs/security-limitations.md) — Honest prototype disclaimers
+- [Test Plan](docs/test-plan.md) — 14 manual test cases
+
 ## Security Limitations
 
 - Not production-ready.
@@ -185,6 +193,8 @@ See [test-checklist.md](test-checklist.md) for the full manual test plan using t
 - Blockchain does not automatically make off-chain data private.
 - Production requires encrypted off-chain storage, secure key management, verified identities, and security review.
 - Payments are simulated.
+- See [docs/security-limitations.md](docs/security-limitations.md) for full details.
+
 
 ## Future Roadmap
 

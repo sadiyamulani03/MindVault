@@ -1,0 +1,13 @@
+# Environment variables and secrets
+.env
+.env.*
+*.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.log

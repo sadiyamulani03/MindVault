@@ -1,0 +1,139 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "client", "type": "address" },
+      { "internalType": "bytes32", "name": "recordHash", "type": "bytes32" },
+      { "internalType": "uint64", "name": "durationSeconds", "type": "uint64" }
+    ],
+    "name": "requestAccess",
+    "outputs": [{ "internalType": "uint256", "name": "recordId", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "recordId", "type": "uint256" }
+    ],
+    "name": "approveConsent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "recordId", "type": "uint256" }
+    ],
+    "name": "revokeAccess",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "recordId", "type": "uint256" }
+    ],
+    "name": "completeSession",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "recordId", "type": "uint256" }
+    ],
+    "name": "isAccessValid",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "recordId", "type": "uint256" }
+    ],
+    "name": "getAccess",
+    "outputs": [
+      { "internalType": "address", "name": "therapist", "type": "address" },
+      { "internalType": "address", "name": "client", "type": "address" },
+      { "internalType": "bytes32", "name": "recordHash", "type": "bytes32" },
+      { "internalType": "uint64", "name": "expiry", "type": "uint64" },
+      { "internalType": "enum MindVault.Status", "name": "status", "type": "uint8" },
+      { "internalType": "bool", "name": "exists", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "records",
+    "outputs": [
+      { "internalType": "address", "name": "therapist", "type": "address" },
+      { "internalType": "address", "name": "client", "type": "address" },
+      { "internalType": "bytes32", "name": "recordHash", "type": "bytes32" },
+      { "internalType": "uint64", "name": "expiry", "type": "uint64" },
+      { "internalType": "enum MindVault.Status", "name": "status", "type": "uint8" },
+      { "internalType": "bool", "name": "exists", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "recordCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "recordId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "therapist", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "client", "type": "address" },
+      { "indexed": false, "internalType": "bytes32", "name": "recordHash", "type": "bytes32" },
+      { "indexed": false, "internalType": "uint64", "name": "expiry", "type": "uint64" }
+    ],
+    "name": "AccessRequested",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "recordId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "client", "type": "address" }
+    ],
+    "name": "ConsentApproved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "recordId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "by", "type": "address" }
+    ],
+    "name": "AccessRevoked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "recordId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "therapist", "type": "address" }
+    ],
+    "name": "SessionCompleted",
+    "type": "event"
+  },
+  { "inputs": [{ "internalType": "uint256", "name": "recordId", "type": "uint256" }], "name": "AccessNotFound", "type": "error" },
+  { "inputs": [], "name": "NotClient", "type": "error" },
+  { "inputs": [], "name": "NotTherapist", "type": "error" },
+  { "inputs": [], "name": "NotAuthorized", "type": "error" },
+  { "inputs": [], "name": "AccessNotRequested", "type": "error" },
+  { "inputs": [], "name": "AccessNotApproved", "type": "error" },
+  { "inputs": [], "name": "AccessExpired", "type": "error" },
+  { "inputs": [], "name": "AccessAlreadyRevoked", "type": "error" },
+  { "inputs": [], "name": "AccessAlreadyCompleted", "type": "error" },
+  { "inputs": [], "name": "InvalidClient", "type": "error" },
+  { "inputs": [], "name": "InvalidRecordHash", "type": "error" },
+  { "inputs": [], "name": "InvalidDuration", "type": "error" }
+]

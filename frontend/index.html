@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindVault — Privacy-First Therapy Workspace</title>
+  <meta name="description" content="MindVault is a privacy-first workspace for solo therapists. Secure client record access, consent management, and session tracking powered by blockchain." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+     ============================================================ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🧠</div>
+    <div>
+      <div class="logo-text">MindVault</div>
+      <div class="logo-sub">Therapy Workspace</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+
+    <a class="nav-item active" id="nav-dashboard" href="#" onclick="return false;">
+      <span class="nav-icon">🏠</span> Dashboard
+    </a>
+    <a class="nav-item" id="nav-appointments" href="#" onclick="return false;">
+      <span class="nav-icon">📅</span> Appointments
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" id="nav-clients" href="#" onclick="return false;">
+      <span class="nav-icon">👥</span> Clients
+    </a>
+    <a class="nav-item" id="nav-records" href="#" onclick="return false;">
+      <span class="nav-icon">📋</span> Records
+    </a>
+
+    <div class="nav-section-label">Finance</div>
+
+    <a class="nav-item" id="nav-payments" href="#" onclick="return false;">
+      <span class="nav-icon">💳</span> Payments
+    </a>
+
+    <div class="nav-section-label">System</div>
+
+    <a class="nav-item" id="nav-settings" href="#" onclick="return false;">
+      <span class="nav-icon">⚙️</span> Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="sidebar-avatar">?</div>
+      <div>
+        <div class="user-name" id="sidebar-name">Not Connected</div>
+        <div class="user-role" id="sidebar-role">—</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ============================================================
+     MAIN WRAPPER
+     ============================================================ -->
+<div class="main-wrapper">
+
+  <!-- TOP HEADER -->
+  <header class="top-header">
+    <div class="flex items-center gap-8">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">☰</button>
+      <div class="header-title">Dashboard <span>/ Overview</span></div>
+    </div>
+    <div class="header-right">
+      <span id="demo-badge-header" class="demo-badge hidden">Demo Mode Active</span>
+      <span id="network-badge" class="network-badge hidden">
+        <span class="network-dot"></span> Polygon Amoy
+      </span>
+      <span class="wallet-addr" id="wallet-display"></span>
+      <button id="btn-connect" onclick="connectWallet()">
+        🦊 Connect Wallet
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT AREA -->
+  <main class="content-area" id="main-content">
+
+    <!-- ── STAT CARDS ── -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon blue">📅</div>
+        <div>
+          <div class="stat-label">Today's Sessions</div>
+          <div class="stat-value">3</div>
+          <div class="stat-sub">2 completed · 1 upcoming</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon teal">👥</div>
+        <div>
+          <div class="stat-label">Active Clients</div>
+          <div class="stat-value">12</div>
+          <div class="stat-sub">All records secured</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">✅</div>
+        <div>
+          <div class="stat-label">Consents Active</div>
+          <div class="stat-value" id="stat-consents">0</div>
+          <div class="stat-sub">Live blockchain records</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">🔐</div>
+        <div>
+          <div class="stat-label">Records Verified</div>
+          <div class="stat-value">28</div>
+          <div class="stat-sub">Tamper-proof on-chain</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── APPOINTMENTS + SLOTS ── -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📅 Today's Appointments</span>
+          <span class="tag blue">Saturday, Oct 17</span>
+        </div>
+        <div class="card-body">
+          <div class="flex flex-wrap gap-8 mt-8">
+            <div style="flex:1; min-width:220px;">
+              <div class="section-heading" style="margin-bottom:10px;">Morning</div>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-dot con">🕙</div>
+                  <div class="timeline-body">
+                    <div class="timeline-event">Alex Rivera — CBT Session</div>
+                    <div class="timeline-time">10:00 AM · 60 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot con">🕛</div>
+                  <div class="timeline-body">
+                    <div class="timeline-event">Morgan Patel — Anxiety Support</div>
+                    <div class="timeline-time">12:00 PM · 50 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot req">🕒</div>
+                  <div class="timeline-body">
+                    <div class="timeline-event">Jordan Kim — Initial Consult</div>
+                    <div class="timeline-time">3:00 PM · 45 min · <span class="tag warn" style="font-size:10px;padding:1px 7px;">Upcoming</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🗓 Available Slots — This Week</span>
+          <span class="tag green">5 open</span>
+        </div>
+        <div class="card-body">
+          <div class="section-heading" style="margin-bottom:10px;">Mon – Fri</div>
+          <div class="slot-grid">
+            <div class="slot slot-booked">    <span class="slot-time">9:00 AM</span>  <span class="slot-label">Mon – Booked</span></div>
+            <div class="slot slot-available">  <span class="slot-time">11:00 AM</span> <span class="slot-label">Mon – Open</span></div>
+            <div class="slot slot-booked">    <span class="slot-time">2:00 PM</span>  <span class="slot-label">Tue – Booked</span></div>
+            <div class="slot slot-available">  <span class="slot-time">4:00 PM</span>  <span class="slot-label">Tue – Open</span></div>
+            <div class="slot slot-booked">    <span class="slot-time">10:00 AM</span> <span class="slot-label">Wed – Booked</span></div>
+            <div class="slot slot-available">  <span class="slot-time">1:00 PM</span>  <span class="slot-label">Wed – Open</span></div>
+            <div class="slot slot-available">  <span class="slot-time">3:00 PM</span>  <span class="slot-label">Thu – Open</span></div>
+            <div class="slot slot-booked">    <span class="slot-time">11:00 AM</span> <span class="slot-label">Fri – Booked</span></div>
+            <div class="slot slot-available">  <span class="slot-time">5:00 PM</span>  <span class="slot-label">Fri – Open</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CLIENT PROFILE + CONSENT WORKFLOW ── -->
+    <div class="section-heading">Demo Client Workflow</div>
+    <div class="two-col">
+
+      <!-- CLIENT PROFILE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👤 Client Profile</span>
+          <span class="tag purple">Demo</span>
+        </div>
+        <div class="client-profile">
+          <div class="client-avatar">JD</div>
+          <div class="client-info">
+            <div class="client-name">Jordan Demo</div>
+            <div class="client-meta">DOB: Jan 15, 1990 · Client ID: #MV-0042</div>
+            <div class="client-tags">
+              <span class="tag blue">Active Client</span>
+              <span class="tag teal">CBT Protocol</span>
+              <span class="tag purple" id="client-role-tag">Awaiting Consent</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="divider"></div>
+          <div class="record-hash-display">
+            <strong>🔒 Encrypted Record Hash</strong>
+            0x1234567890abcdef1234567890abcdef<br>1234567890abcdef1234567890abcdef
+          </div>
+          <div class="flex gap-8 mt-12 flex-wrap">
+            <div style="flex:1; min-width:120px;">
+              <div class="text-xs text-muted">Sessions Completed</div>
+              <div style="font-size:22px; font-weight:800; color:var(--clr-text);">14</div>
+            </div>
+            <div style="flex:1; min-width:120px;">
+              <div class="text-xs text-muted">Next Session</div>
+              <div style="font-size:16px; font-weight:700; color:var(--clr-primary);">3:00 PM Today</div>
+            </div>
+            <div style="flex:1; min-width:120px;">
+              <div class="text-xs text-muted">Insurance</div>
+              <div style="font-size:14px; font-weight:600;">BlueCross Demo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONSENT WORKFLOW -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🛡 Secure Record Access</span>
+          <span id="workflow-stage-badge" class="tag blue">Stage 1 of 4</span>
+        </div>
+        <div class="workflow-state">
+
+          <!-- Current status -->
+          <div>
+            <div class="text-xs text-muted" style="margin-bottom:6px;">Current Access Status</div>
+            <div id="access-status-pill" class="status-pill pill-idle">
+              <span class="dot"></span> No Access Requested
+            </div>
+          </div>
+
+          <!-- Record ID display -->
+          <div id="record-id-display" class="hidden">
+            <div class="text-xs text-muted" style="margin-bottom:4px;">Record ID (on-chain)</div>
+            <div class="record-hash-display" style="font-size:13px; padding:8px 12px;">
+              <span id="record-id-value" style="color:var(--clr-teal); font-weight:700;">#—</span>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="divider"></div>
+
+          <!-- PRIMARY ACTION BUTTON -->
+          <button id="btn-primary-action" class="btn btn-primary btn-full" onclick="primaryAction()">
+            🔓 Request Secure Access
+          </button>
+
+          <!-- SECONDARY BUTTONS -->
+          <div class="flex gap-8 flex-wrap" id="secondary-actions">
+            <button id="btn-revoke" class="btn btn-error btn-sm hidden" onclick="revokeAccess()">
+              🚫 Revoke Access
+            </button>
+            <button id="btn-verify" class="btn btn-ghost btn-sm hidden" onclick="verifyAccess()">
+              🔍 Verify Access
+            </button>
+          </div>
+
+          <!-- Status message -->
+          <div id="status-message" class="text-xs text-muted hidden"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RECORD VERIFICATION + EXPIRY + PROOF ── -->
+    <div class="three-col">
+
+      <!-- Record Verification -->
+      <div class="card" id="card-verification">
+        <div class="card-header">
+          <span class="card-title">✅ Record Verified</span>
+        </div>
+        <div class="card-body">
+          <div id="verification-state">
+            <div class="status-pill pill-idle" id="verify-pill">
+              <span class="dot"></span> Not Verified
+            </div>
+            <div class="text-sm text-muted mt-8" id="verify-text">Request access first to verify the client's record on-chain.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Access Expiry -->
+      <div class="card" id="card-expiry">
+        <div class="card-header">
+          <span class="card-title">⏳ Access Expiry</span>
+        </div>
+        <div class="card-body">
+          <div id="expiry-state">
+            <div class="text-xs text-muted">Time Remaining</div>
+            <div style="font-size:28px; font-weight:800; color:var(--clr-text);" id="expiry-time">—</div>
+            <div class="expiry-bar" style="margin-top:10px;">
+              <div class="expiry-fill" id="expiry-fill" style="width:0%;"></div>
+            </div>
+            <div class="text-xs text-muted mt-8" id="expiry-text">No active session access.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Consent Status -->
+      <div class="card" id="card-consent">
+        <div class="card-header">
+          <span class="card-title">🤝 Consent Status</span>
+        </div>
+        <div class="card-body">
+          <div class="status-pill pill-idle" id="consent-pill">
+            <span class="dot"></span> Awaiting Consent
+          </div>
+          <div class="text-sm text-muted mt-8" id="consent-text">Client consent has not been recorded yet.</div>
+          <div class="mt-12">
+            <button id="btn-approve-consent" class="btn btn-teal btn-sm btn-full hidden" onclick="approveConsent()">
+              ✅ Approve Consent (Client)
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── PAYMENT CARD (appears after session complete) ── -->
+    <div class="payment-card" id="payment-card">
+      <div class="payment-header">
+        <div class="payment-title">💳 Payment Request <span class="tag warn" style="font-size:10px; margin-left:6px;">Demo Mode</span></div>
+        <span class="tag green">Session Complete</span>
+      </div>
+      <div class="payment-body">
+        <div class="flex items-center justify-between flex-wrap gap-8">
+          <div>
+            <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
+            <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
+            <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+          </div>
+          <button class="btn btn-success" onclick="requestPayment()">
+            💳 Send Invoice (Demo)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACCESS HISTORY + BLOCKCHAIN PROOF ── -->
+    <div class="two-col">
+
+      <!-- ACCESS HISTORY TIMELINE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🕐 Access History</span>
+          <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Clear</button>
+        </div>
+        <div class="card-body" style="padding-top:8px;">
+          <div class="timeline" id="access-timeline">
+            <div class="timeline-empty" id="timeline-empty">
+              <div class="empty-icon">📭</div>
+              No access events yet.<br><span class="text-xs">Events appear here as you step through the workflow.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCKCHAIN PROOF PANEL -->
+      <div class="proof-panel">
+        <div class="card-header">
+          <span class="card-title">⛓ Blockchain Proof</span>
+          <span id="proof-mode-badge" class="tag warn" style="font-size:10px;">Disconnected</span>
+        </div>
+        <div class="proof-grid">
+          <div class="proof-item">
+            <div class="proof-label">Contract Address</div>
+            <div class="proof-value highlight" id="proof-contract">0x5d72...046f</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-label">Network</div>
+            <div class="proof-value highlight">Polygon Amoy</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-label">Chain ID</div>
+            <div class="proof-value">80002</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-label">Access Status</div>
+            <div class="proof-value" id="proof-access-status">—</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-label">Record ID</div>
+            <div class="proof-value" id="proof-record-id">—</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-label">Access Expiry</div>
+            <div class="proof-value" id="proof-expiry">—</div>
+          </div>
+          <div class="proof-item" style="grid-column: 1 / -1;">
+            <div class="proof-label">Latest Transaction</div>
+            <div class="proof-value" id="proof-tx-hash">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main><!-- /content-area -->
+</div><!-- /main-wrapper -->
+
+<!-- ============================================================
+     LOADING OVERLAY
+     ============================================================ -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-card">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loading-title">Processing…</div>
+    <div class="loading-sub" id="loading-sub">Please wait for confirmation</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CONSENT APPROVAL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="consent-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🤝 Consent Request</div>
+      <button class="modal-close" onclick="closeConsentModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="text-sm" style="color:var(--clr-text-2); margin-bottom:16px; line-height:1.6;">
+        <strong>Jordan Demo</strong> is being asked to grant access to their encrypted therapy record. 
+        This consent will be permanently recorded on the Polygon blockchain.
+      </p>
+      <div class="info-row">
+        <span class="info-label">Therapist</span>
+        <span class="info-val mono" id="modal-therapist">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Record Hash</span>
+        <span class="info-val mono" style="font-size:10px;">0x1234567890abcdef…abcdef</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Access Duration</span>
+        <span class="info-val">60 minutes</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Record ID</span>
+        <span class="info-val mono" id="modal-record-id">—</span>
+      </div>
+      <div style="margin-top:16px; padding:12px 16px; background:var(--clr-warn-l); border-radius:10px; border:1px solid #fcd34d;">
+        <div class="text-sm" style="color:#92400e; font-weight:600;">⚠ Important</div>
+        <div class="text-xs" style="color:#92400e; margin-top:4px; line-height:1.6;">
+          By approving, you authorise this therapist to access your encrypted record for the stated duration. 
+          This action is irreversible on-chain.
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeConsentModal()">Cancel</button>
+      <button class="btn btn-teal" onclick="confirmApproveConsent()">✅ Approve Consent</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div id="toast-container"></div>
+
+<!-- ============================================================
+     ethers.js v6 CDN
+     ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

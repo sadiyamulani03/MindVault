@@ -300,15 +300,38 @@ async function primaryAction() {
 async function doRequestAccess() {
   if (state.demoMode) { return demoRequestAccess(); }
 
-  setLoading(true, "Requesting Secure Access", "Awaiting MetaMask confirmation…");
+  // DO NOT show loading overlay before the contract call — it can interfere
+  // with MetaMask rendering the confirmation popup on some browsers.
   try {
-    // ethers.getAddress() applies EIP-55 checksum — avoids InvalidClient revert
     const clientChecksummed = ethers.getAddress(CLIENT_ADDRESS);
+
+    // Estimate gas first so we get a clear revert message before MetaMask opens
+    let gasEstimate;
+    try {
+      gasEstimate = await state.contract.requestAccess.estimateGas(
+        clientChecksummed,
+        RECORD_HASH,
+        ACCESS_DURATION
+      );
+    } catch (estErr) {
+      // Surface the revert reason immediately — before MetaMask even opens
+      handleContractError(estErr, "requestAccess (gas estimate)");
+      return;
+    }
+
+    // Add 30% buffer; Polygon Amoy can be spiky
+    const gasLimit = (gasEstimate * 130n) / 100n;
+
+    // NOW show loading — MetaMask popup is about to open
+    setLoading(true, "Requesting Secure Access", "Approve the transaction in MetaMask…");
+
     const tx = await state.contract.requestAccess(
       clientChecksummed,
       RECORD_HASH,
-      ACCESS_DURATION
+      ACCESS_DURATION,
+      { gasLimit }
     );
+
     setLoading(true, "Transaction Sent", "Waiting for blockchain confirmation…");
     showToast("info", "Transaction Pending", `Tx: ${shortAddr(tx.hash)}`);
 
@@ -320,16 +343,20 @@ async function doRequestAccess() {
       try {
         const parsed = state.contract.interface.parseLog(log);
         if (parsed && parsed.name === "AccessRequested") {
-          recordId = parsed.args[0]; // recordId
+          recordId = parsed.args[0]; // recordId is first indexed arg
           break;
         }
-      } catch { /* ignore */ }
+      } catch { /* ignore logs from other contracts */ }
     }
 
-    // Fallback: if event parsing fails, try return value approach
+    // Fallback: read recordCount() — the new record is at (count - 1)
     if (recordId === null) {
-      // Some contracts emit via return; try reading the last record ID
-      recordId = BigInt(state.demoRecordCounter);
+      try {
+        const count = await state.contract.recordCount();
+        recordId = count - 1n;
+      } catch {
+        recordId = 0n; // safest default — first record is always 0
+      }
     }
 
     state.recordId = recordId;
@@ -347,6 +374,7 @@ async function doRequestAccess() {
     handleContractError(err, "requestAccess");
   }
 }
+
 
 // ── 2. Approve Consent ────────────────────────────────────────
 async function approveConsent() {

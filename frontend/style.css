@@ -44,6 +44,159 @@
   --transition:      0.22s cubic-bezier(.4,0,.2,1);
 }
 
+/* ---------- Dark Mode Variable Overrides ---------- */
+[data-theme="dark"] {
+  --clr-bg:        #0f172a;
+  --clr-surface:   #1e293b;
+  --clr-surface-2: #172035;
+  --clr-border:    #334155;
+  --clr-border-2:  #475569;
+  --clr-text:      #f1f5f9;
+  --clr-text-2:    #94a3b8;
+  --clr-text-3:    #64748b;
+  /* muted tinted backgrounds for tags/pills in dark mode */
+  --clr-primary-l: rgba(14,165,233,.18);
+  --clr-teal-l:    rgba(20,184,166,.18);
+  --clr-success-l: rgba(34,197,94,.18);
+  --clr-warn-l:    rgba(245,158,11,.18);
+  --clr-error-l:   rgba(239,68,68,.18);
+  --clr-purple-l:  rgba(139,92,246,.18);
+  --shadow-sm:     0 1px 3px rgba(0,0,0,.3);
+  --shadow:        0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,.55);
+}
+
+/* Dark-mode component tweaks */
+[data-theme="dark"] .payment-card {
+  background: linear-gradient(135deg, rgba(20,184,166,.1), rgba(34,197,94,.08));
+  border-color: #14b8a6;
+}
+[data-theme="dark"] .payment-title { color: #5eead4; }
+[data-theme="dark"] .payment-amount { color: #5eead4; }
+[data-theme="dark"] .payment-meta   { color: #94a3b8; }
+[data-theme="dark"] .payment-header { border-bottom-color: #334155; }
+[data-theme="dark"] .slot-available { background: rgba(34,197,94,.12); color: #4ade80; border-color: #166534; }
+[data-theme="dark"] .slot-booked    { background: rgba(14,165,233,.12); color: #38bdf8; border-color: #0369a1; }
+[data-theme="dark"] .record-hash-display { background: rgba(255,255,255,.04); border-color: #334155; color: #94a3b8; }
+[data-theme="dark"] .record-hash-display strong { color: #e2e8f0; }
+[data-theme="dark"] .loading-card { background: #1e293b; }
+[data-theme="dark"] .modal { background: #1e293b; }
+[data-theme="dark"] .info-row { border-bottom-color: #334155; }
+[data-theme="dark"] .demo-badge { background: linear-gradient(90deg,#451a03,#78350f); color: #fde68a; border-color: #92400e; }
+[data-theme="dark"] .user-chip { background: var(--clr-surface-2); border-color: var(--clr-border); }
+[data-theme="dark"] .top-header { background: var(--clr-surface); border-bottom-color: var(--clr-border); }
+
+/* ============================================================
+   TOGGLE SWITCH
+   ============================================================ */
+.toggle-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--clr-border);
+  gap: 12px;
+}
+.toggle-wrap:last-child { border-bottom: none; }
+.toggle-label { font-size: 13px; color: var(--clr-text-2); font-weight: 500; }
+.toggle-label small { display: block; font-size: 11px; color: var(--clr-text-3); margin-top: 2px; }
+.toggle {
+  position: relative; display: inline-block;
+  width: 44px; height: 24px; flex-shrink: 0;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0;
+  background: var(--clr-border-2);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--transition);
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+.toggle input:checked + .toggle-slider { background: var(--clr-teal); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* ============================================================
+   SEGMENTED BUTTON (theme picker)
+   ============================================================ */
+.seg-group {
+  display: flex; gap: 0;
+  border: 1.5px solid var(--clr-border-2);
+  border-radius: 10px; overflow: hidden;
+}
+.seg-btn {
+  flex: 1; padding: 8px 14px;
+  background: transparent;
+  border: none; border-right: 1px solid var(--clr-border-2);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  color: var(--clr-text-2);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+.seg-btn:last-child { border-right: none; }
+.seg-btn:hover { background: var(--clr-primary-l); color: var(--clr-primary-d); }
+.seg-btn.active {
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-teal));
+  color: #fff;
+}
+
+/* ============================================================
+   SETTINGS PAGE SPECIFICS
+   ============================================================ */
+.settings-section-head {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  color: var(--clr-text-3);
+  padding: 0 0 10px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--clr-border);
+}
+.settings-select {
+  width: 100%; padding: 9px 12px;
+  background: var(--clr-surface-2);
+  border: 1.5px solid var(--clr-border-2);
+  border-radius: 9px;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: var(--clr-text);
+  cursor: pointer;
+  transition: border-color var(--transition);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+.settings-select:focus { outline: none; border-color: var(--clr-primary); }
+[data-theme="dark"] .settings-select { background-color: var(--clr-surface-2); }
+
+.coming-soon-badge {
+  display: inline-flex; align-items: center;
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 99px;
+  background: var(--clr-purple-l); color: var(--clr-purple);
+  vertical-align: middle; margin-left: 6px;
+  text-transform: uppercase; letter-spacing: .4px;
+}
+
+/* Theme quick-toggle in header */
+#btn-theme-toggle {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--clr-surface-2);
+  border: 1.5px solid var(--clr-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  flex-shrink: 0;
+}
+#btn-theme-toggle:hover { border-color: var(--clr-primary); background: var(--clr-primary-l); transform: rotate(20deg); }
+
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }

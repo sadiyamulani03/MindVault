@@ -104,6 +104,7 @@
         <span class="network-dot"></span> Polygon Amoy
       </span>
       <span class="wallet-addr" id="wallet-display"></span>
+      <button id="btn-theme-toggle" title="Toggle dark/light mode" onclick="window.MV && window.MV.toggleTheme()">🌙</button>
       <button id="btn-connect" onclick="connectWallet()">
         🦊 Connect Wallet
       </button>
@@ -355,9 +356,9 @@
         <div class="payment-body">
           <div class="flex items-center justify-between flex-wrap gap-8">
             <div>
-              <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
-              <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
-              <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+              <div class="payment-amount" id="dash-payment-amount">₹1,500</div>
+              <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT · <em>Demo Mode — payments are simulated</em></div>
+              <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong id="dash-payment-patient">₹300</strong></div>
             </div>
             <button class="btn btn-success" onclick="requestPayment()">
               💳 Send Invoice (Demo)
@@ -681,9 +682,10 @@
             <span class="tag warn" id="payments-status-badge">Pending</span>
           </div>
           <div class="payment-body">
-            <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
+            <div class="payment-amount" id="pay-invoice-amount">₹1,500</div>
             <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
-            <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+            <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong id="pay-invoice-patient">₹300</strong></div>
+            <div class="payment-meta" style="margin-top:6px; font-style:italic; color:var(--clr-text-3);">Demo Mode — payments are simulated</div>
             <div class="mt-16">
               <button class="btn btn-success btn-full" id="payments-send-btn" onclick="simulatePayment()">
                 💳 Send Invoice (Demo)
@@ -703,21 +705,21 @@
                 <div class="timeline-dot pay">💳</div>
                 <div class="timeline-body">
                   <div class="timeline-event">Alex Rivera — CBT Session</div>
-                  <div class="timeline-time">Oct 17 · $180.00 · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
+                  <div class="timeline-time">Oct 17 · <span id="pay-hist-alex">₹1,500</span> · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
                 </div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot pay">💳</div>
                 <div class="timeline-body">
                   <div class="timeline-event">Morgan Patel — Anxiety Support</div>
-                  <div class="timeline-time">Oct 17 · $150.00 · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
+                  <div class="timeline-time">Oct 17 · <span id="pay-hist-morgan">₹1,200</span> · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
                 </div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot req">⏳</div>
                 <div class="timeline-body">
                   <div class="timeline-event">Jordan Demo — CBT Session</div>
-                  <div class="timeline-time">Oct 17 · $180.00 · <span class="tag warn" style="font-size:10px;padding:1px 7px;" id="payments-jordan-status">Pending</span></div>
+                  <div class="timeline-time">Oct 17 · <span id="pay-hist-jordan">₹1,500</span> · <span class="tag warn" style="font-size:10px;padding:1px 7px;" id="payments-jordan-status">Pending</span></div>
                 </div>
               </div>
             </div>
@@ -735,18 +737,108 @@
 
       <div>
         <div class="section-page-title">⚙️ Settings</div>
-        <div class="section-page-sub">Wallet, network, and application configuration.</div>
+        <div class="section-page-sub">Appearance, regional preferences, notifications, and account configuration.</div>
       </div>
 
+      <!-- ROW 1: Appearance + Regional -->
       <div class="two-col">
-        <!-- Wallet & Role -->
+
+        <!-- APPEARANCE -->
         <div class="card">
           <div class="card-header">
-            <span class="card-title">🦊 Wallet &amp; Role</span>
+            <span class="card-title">🎨 Appearance</span>
           </div>
           <div class="card-body">
+            <div class="settings-section-head">Theme</div>
+            <div class="seg-group" style="margin-bottom:20px;">
+              <button class="seg-btn" id="seg-light" onclick="window.MV.setTheme('light')">☀️ Light</button>
+              <button class="seg-btn" id="seg-system" onclick="window.MV.setTheme('system')">💻 System</button>
+              <button class="seg-btn" id="seg-dark" onclick="window.MV.setTheme('dark')">🌙 Dark</button>
+            </div>
+
+            <div class="settings-section-head" style="margin-top:4px;">Currency</div>
+            <select class="settings-select" id="currency-select" onchange="window.MV.setCurrency(this.value)">
+              <option value="INR">🇮🇳 INR — ₹ Indian Rupee</option>
+              <option value="USD">🇺🇸 USD — $ US Dollar</option>
+              <option value="EUR">🇪🇺 EUR — € Euro</option>
+              <option value="GBP">🇬🇧 GBP — £ Pound Sterling</option>
+              <option value="AED">🇦🇪 AED — د.إ UAE Dirham</option>
+            </select>
+
+            <div class="settings-section-head" style="margin-top:20px;">Language</div>
+            <select class="settings-select" id="language-select" onchange="window.MV.setLanguage(this.value)">
+              <option value="en">🌐 English</option>
+              <option value="hi" disabled>हिन्दी <span class="coming-soon-badge">Coming Soon</span></option>
+              <option value="ar" disabled>العربية — Coming Soon</option>
+              <option value="fr" disabled>Français — Coming Soon</option>
+              <option value="de" disabled>Deutsch — Coming Soon</option>
+            </select>
+            <div style="margin-top:6px; font-size:11px; color:var(--clr-text-3);">More languages <span class="coming-soon-badge">Coming Soon</span></div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔔 Notifications</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-section-head">Preferences</div>
+
+            <div class="toggle-wrap">
+              <div class="toggle-label">
+                Appointment Reminders
+                <small>Notify 30 minutes before each session</small>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="notif-appt" checked onchange="window.MV.saveNotifPref('appt', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-wrap">
+              <div class="toggle-label">
+                Payment Reminders
+                <small>Notify when an invoice is overdue</small>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="notif-pay" checked onchange="window.MV.saveNotifPref('pay', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-wrap">
+              <div class="toggle-label">
+                Consent Updates
+                <small>Notify when a client approves or revokes consent</small>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="notif-consent" checked onchange="window.MV.saveNotifPref('consent', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="divider"></div>
+            <div style="padding:10px 0; font-size:11px; color:var(--clr-text-3); line-height:1.6;">
+              ℹ Notifications are simulated in this prototype. No real push notifications are sent.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: Connected Account + Network -->
+      <div class="two-col">
+
+        <!-- CONNECTED ACCOUNT -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🦊 Connected Account</span>
+            <span id="settings-demo-badge" class="tag warn" style="font-size:10px;">Disconnected</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-section-head">Wallet</div>
             <div class="settings-row">
-              <span class="settings-label">Connected Address</span>
+              <span class="settings-label">Address</span>
               <span class="settings-value mono" id="settings-address">Not connected</span>
             </div>
             <div class="settings-row">
@@ -764,36 +856,41 @@
           </div>
         </div>
 
-        <!-- Network & Contract -->
+        <!-- NETWORK & CONTRACT -->
         <div class="card">
           <div class="card-header">
             <span class="card-title">⛓ Network &amp; Contract</span>
           </div>
           <div class="card-body">
+            <div class="settings-section-head">Blockchain</div>
             <div class="settings-row">
               <span class="settings-label">Network</span>
-              <span class="settings-value" style="color:var(--clr-teal-d);">Polygon Amoy Testnet</span>
+              <span class="settings-value" style="color:var(--clr-teal);">Polygon Amoy Testnet</span>
             </div>
             <div class="settings-row">
               <span class="settings-label">Chain ID</span>
               <span class="settings-value">80002</span>
             </div>
             <div class="settings-row">
-              <span class="settings-label">Contract Address</span>
+              <span class="settings-label">Contract</span>
               <span class="settings-value mono">
                 <a href="https://amoy.polygonscan.com/address/0x5d721854efe4916607f3ea57a4d2afc603df046f"
                    target="_blank" style="color:var(--clr-primary); text-decoration:none;">
-                  0x5d721854…df046f ↗
+                  0x5d7218…df046f ↗
                 </a>
               </span>
             </div>
             <div class="settings-row">
               <span class="settings-label">Gas (Priority Fee)</span>
-              <span class="settings-value">30 Gwei (Amoy minimum)</span>
+              <span class="settings-value">30 Gwei</span>
             </div>
             <div class="settings-row">
               <span class="settings-label">ethers.js</span>
               <span class="settings-value">v6.13.2 (CDN)</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">RPC</span>
+              <span class="settings-value mono" style="font-size:10px;">rpc-amoy.polygon.technology</span>
             </div>
           </div>
         </div>
@@ -872,155 +969,235 @@
 <script src="app.js"></script>
 
 <!-- ============================================================
-     SPA ROUTER  (hash-based, no libraries)
+     SPA ROUTER + THEME + CURRENCY  (hash-based, no libraries)
      ============================================================ -->
 <script>
 (function () {
   "use strict";
 
-  const PAGES = ["dashboard", "appointments", "clients", "records", "payments", "settings"];
+  // ── Currency data ─────────────────────────────────────────────
+  var CURRENCY_DATA = {
+    INR: { symbol: '₹', session: '₹1,500', patient: '₹300',   alex: '₹1,500', morgan: '₹1,200', jordan: '₹1,500' },
+    USD: { symbol: '$', session: '$18',     patient: '$3.60',  alex: '$18',     morgan: '$14',     jordan: '$18'    },
+    EUR: { symbol: '€', session: '€17',     patient: '€3.40',  alex: '€17',     morgan: '€13',     jordan: '€17'    },
+    GBP: { symbol: '£', session: '£15',     patient: '£3.00',  alex: '£15',     morgan: '£12',     jordan: '£15'    },
+    AED: { symbol: 'AED ', session: 'AED 66', patient: 'AED 13', alex: 'AED 66', morgan: 'AED 51', jordan: 'AED 66' },
+  };
 
-  const PAGE_TITLES = {
-    dashboard:    "Dashboard <span>/ Overview</span>",
-    appointments: "Appointments <span>/ Schedule</span>",
-    clients:      "Clients <span>/ Profiles</span>",
-    records:      "Records <span>/ Encrypted Files</span>",
-    payments:     "Payments <span>/ Invoices</span>",
-    settings:     "Settings <span>/ Configuration</span>",
+  var currentCurrency = localStorage.getItem('mindvault_currency') || 'INR';
+  var currentTheme    = localStorage.getItem('mindvault_theme')    || 'system';
+
+  // ── Theme ──────────────────────────────────────────────────────
+  function resolveTheme(t) {
+    if (t === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return t;
+  }
+
+  function applyTheme(t) {
+    var resolved = resolveTheme(t);
+    document.documentElement.setAttribute('data-theme', resolved);
+    var btn = document.getElementById('btn-theme-toggle');
+    if (btn) btn.textContent = resolved === 'dark' ? '☀️' : '🌙';
+    // Highlight active seg button
+    ['light','system','dark'].forEach(function(k) {
+      var el = document.getElementById('seg-' + k);
+      if (el) el.classList.toggle('active', k === t);
+    });
+  }
+
+  function setTheme(t) {
+    currentTheme = t;
+    localStorage.setItem('mindvault_theme', t);
+    applyTheme(t);
+    if (window.showToast) window.showToast('success', 'Theme Saved', 'Switched to ' + (t === 'system' ? 'System Default' : t.charAt(0).toUpperCase() + t.slice(1)) + ' mode.');
+  }
+
+  function toggleTheme() {
+    var resolved = resolveTheme(currentTheme);
+    setTheme(resolved === 'dark' ? 'light' : 'dark');
+  }
+
+  // ── Currency ───────────────────────────────────────────────────
+  function updateAllCurrencyDisplays() {
+    var d = CURRENCY_DATA[currentCurrency] || CURRENCY_DATA['INR'];
+    // Dashboard payment card
+    var dpa = document.getElementById('dash-payment-amount');
+    var dpp = document.getElementById('dash-payment-patient');
+    if (dpa) dpa.textContent = d.session;
+    if (dpp) dpp.textContent = d.patient;
+    // Payments page
+    var pia = document.getElementById('pay-invoice-amount');
+    var pip = document.getElementById('pay-invoice-patient');
+    if (pia) pia.textContent = d.session;
+    if (pip) pip.textContent = d.patient;
+    // Payment history
+    var ha = document.getElementById('pay-hist-alex');
+    var hm = document.getElementById('pay-hist-morgan');
+    var hj = document.getElementById('pay-hist-jordan');
+    if (ha) ha.textContent = d.alex;
+    if (hm) hm.textContent = d.morgan;
+    if (hj) hj.textContent = d.jordan;
+    // Keep select in sync
+    var sel = document.getElementById('currency-select');
+    if (sel) sel.value = currentCurrency;
+  }
+
+  function setCurrency(c) {
+    if (!CURRENCY_DATA[c]) return;
+    currentCurrency = c;
+    localStorage.setItem('mindvault_currency', c);
+    updateAllCurrencyDisplays();
+    if (window.showToast) window.showToast('success', 'Currency Updated', 'Displaying amounts in ' + c + '.');
+  }
+
+  function setLanguage(l) {
+    if (l !== 'en') {
+      if (window.showToast) window.showToast('info', 'Coming Soon', 'This language is not yet available. English is active.');
+      // Reset select to English
+      var sel = document.getElementById('language-select');
+      if (sel) sel.value = 'en';
+    }
+  }
+
+  function saveNotifPref(key, val) {
+    localStorage.setItem('mindvault_notif_' + key, val ? '1' : '0');
+    if (window.showToast) window.showToast('success', 'Preference Saved', (val ? 'Enabled' : 'Disabled') + ' ' + key + ' notifications.');
+  }
+
+  // Expose on window.MV namespace
+  window.MV = { setTheme: setTheme, toggleTheme: toggleTheme, setCurrency: setCurrency, setLanguage: setLanguage, saveNotifPref: saveNotifPref };
+
+  // ── Pages ──────────────────────────────────────────────────────
+  var PAGES = ['dashboard','appointments','clients','records','payments','settings'];
+  var PAGE_TITLES = {
+    dashboard:    'Dashboard <span>/ Overview</span>',
+    appointments: 'Appointments <span>/ Schedule</span>',
+    clients:      'Clients <span>/ Profiles</span>',
+    records:      'Records <span>/ Encrypted Files</span>',
+    payments:     'Payments <span>/ Invoices</span>',
+    settings:     'Settings <span>/ Configuration</span>',
   };
 
   function showPage(page) {
-    if (!PAGES.includes(page)) page = "dashboard";
-
-    // Hide all sections
-    PAGES.forEach(function (p) {
-      var sec = document.getElementById(p + "-section");
-      if (sec) sec.classList.remove("active");
+    if (!PAGES.includes(page)) page = 'dashboard';
+    PAGES.forEach(function(p) {
+      var sec = document.getElementById(p + '-section');
+      if (sec) sec.classList.remove('active');
     });
-
-    // Show target
-    var target = document.getElementById(page + "-section");
-    if (target) target.classList.add("active");
-
-    // Update sidebar active state
-    document.querySelectorAll(".nav-item").forEach(function (el) {
-      el.classList.toggle("active", el.getAttribute("data-page") === page);
+    var target = document.getElementById(page + '-section');
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(function(el) {
+      el.classList.toggle('active', el.getAttribute('data-page') === page);
     });
-
-    // Update header title
-    var titleEl = document.getElementById("header-title");
+    var titleEl = document.getElementById('header-title');
     if (titleEl) titleEl.innerHTML = PAGE_TITLES[page] || page;
-
-    // Update hash without triggering hashchange again
-    if (window.location.hash !== "#" + page) {
-      history.replaceState(null, "", "#" + page);
-    }
-
-    // Sync dynamic values into secondary sections
+    if (window.location.hash !== '#' + page) history.replaceState(null, '', '#' + page);
     syncSectionData(page);
-
-    // Close mobile sidebar
-    document.getElementById("sidebar").classList.remove("open");
-
-    // Scroll to top
+    document.getElementById('sidebar').classList.remove('open');
     window.scrollTo(0, 0);
   }
 
-  // Keep secondary sections in sync with live state from app.js
   function syncSectionData(page) {
-    // Settings section
-    if (page === "settings") {
-      var addrEl = document.getElementById("settings-address");
-      var roleEl = document.getElementById("settings-role");
-      var demoEl = document.getElementById("settings-demo");
-      if (addrEl) addrEl.textContent = (window.state && window.state.address) ? window.state.address : "Not connected";
+    if (page === 'settings') {
+      var addrEl = document.getElementById('settings-address');
+      var roleEl = document.getElementById('settings-role');
+      var demoEl = document.getElementById('settings-demo');
+      var demoBadge = document.getElementById('settings-demo-badge');
+      if (addrEl) addrEl.textContent = (window.state && window.state.address) ? window.state.address : 'Not connected';
       if (roleEl) {
-        var roleMap = { therapist: "👨‍⚕️ Therapist", client: "👤 Client", admin: "🛡 Admin" };
-        roleEl.textContent = (window.state && window.state.role) ? (roleMap[window.state.role] || window.state.role) : "—";
+        var roleMap = { therapist: '👨‍⚕️ Therapist', client: '👤 Client', admin: '🛡 Admin' };
+        roleEl.textContent = (window.state && window.state.role) ? (roleMap[window.state.role] || window.state.role) : '—';
       }
-      if (demoEl) demoEl.textContent = (window.state && window.state.demoMode) ? "🎭 Active" : "Inactive";
+      var isDemo = window.state && window.state.demoMode;
+      if (demoEl) demoEl.textContent = isDemo ? '🎭 Active' : 'Inactive';
+      if (demoBadge) { demoBadge.textContent = isDemo ? '🎭 Demo' : (window.state && window.state.address) ? '🟢 Live' : 'Disconnected'; demoBadge.className = isDemo ? 'tag warn' : (window.state && window.state.address) ? 'tag teal' : 'tag warn'; }
+      // Sync theme seg buttons
+      applyTheme(currentTheme);
+      // Sync currency select
+      var sel = document.getElementById('currency-select');
+      if (sel) sel.value = currentCurrency;
+      // Sync notification toggles
+      ['appt','pay','consent'].forEach(function(k) {
+        var el = document.getElementById('notif-' + k);
+        if (el) el.checked = localStorage.getItem('mindvault_notif_' + k) !== '0';
+      });
     }
-
-    // Clients section
-    if (page === "clients") {
-      var stageLabels = ["No Access Requested", "Access Requested", "Consent Active ✅", "Session Completed", "Access Revoked"];
-      var consentLabels = ["Awaiting Consent", "Awaiting Consent", "Approved ✅", "Closed", "Closed"];
-      var stage = (window.state) ? window.state.stage : 0;
-      var cAccess = document.getElementById("clients-access-status");
-      var cConsent = document.getElementById("clients-consent-status");
-      var cExpiry = document.getElementById("clients-expiry");
-      if (cAccess)  cAccess.textContent  = stageLabels[stage]  || "—";
-      if (cConsent) cConsent.textContent = consentLabels[stage] || "—";
-      if (cExpiry && window.state && window.state.expiryEnd && window.state.expiryEnd > Date.now()) {
-        cExpiry.textContent = new Date(window.state.expiryEnd).toLocaleTimeString();
-      } else if (cExpiry) {
-        cExpiry.textContent = stage === 0 ? "—" : "Expired / Closed";
-      }
+    if (page === 'clients') {
+      var stageLabels  = ['No Access Requested','Access Requested','Consent Active ✅','Session Completed','Access Revoked'];
+      var consentLabels = ['Awaiting Consent','Awaiting Consent','Approved ✅','Closed','Closed'];
+      var stage = window.state ? window.state.stage : 0;
+      var cA = document.getElementById('clients-access-status');
+      var cC = document.getElementById('clients-consent-status');
+      var cE = document.getElementById('clients-expiry');
+      if (cA) cA.textContent = stageLabels[stage] || '—';
+      if (cC) cC.textContent = consentLabels[stage] || '—';
+      if (cE) cE.textContent = (window.state && window.state.expiryEnd && window.state.expiryEnd > Date.now()) ? new Date(window.state.expiryEnd).toLocaleTimeString() : (stage === 0 ? '—' : 'Expired / Closed');
     }
-
-    // Records section — mirror expiry bar
-    if (page === "records") {
-      var stageMap = ["No Access", "Requested", "Active ✅", "Completed", "Revoked"];
-      var rStatus = document.getElementById("records-access-status");
-      var rExpTime = document.getElementById("records-expiry-time");
-      var rExpFill = document.getElementById("records-expiry-fill");
-      var rExpText = document.getElementById("records-expiry-text");
-      var s = (window.state) ? window.state.stage : 0;
-      if (rStatus) rStatus.textContent = stageMap[s] || "—";
+    if (page === 'records') {
+      var stageMap = ['No Access','Requested','Active ✅','Completed','Revoked'];
+      var s = window.state ? window.state.stage : 0;
+      var rS = document.getElementById('records-access-status');
+      var rT = document.getElementById('records-expiry-time');
+      var rF = document.getElementById('records-expiry-fill');
+      var rX = document.getElementById('records-expiry-text');
+      if (rS) rS.textContent = stageMap[s] || '—';
       if (window.state && window.state.expiryEnd && window.state.expiryEnd > Date.now()) {
         var rem = window.state.expiryEnd - Date.now();
-        var total = window.state.expiryEnd - window.state.expiryStart;
-        var pct = Math.max(0, Math.min(100, (rem / total) * 100));
-        var mins = Math.floor(rem / 60000);
-        var secs = Math.floor((rem % 60000) / 1000);
-        if (rExpTime) rExpTime.textContent = String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0");
-        if (rExpFill) rExpFill.style.width = pct + "%";
-        if (rExpText) rExpText.textContent = "Active until " + new Date(window.state.expiryEnd).toLocaleTimeString();
+        var pct = Math.max(0, Math.min(100, rem / (window.state.expiryEnd - window.state.expiryStart) * 100));
+        if (rT) rT.textContent = String(Math.floor(rem/60000)).padStart(2,'0') + ':' + String(Math.floor((rem%60000)/1000)).padStart(2,'0');
+        if (rF) rF.style.width = pct + '%';
+        if (rX) rX.textContent = 'Active until ' + new Date(window.state.expiryEnd).toLocaleTimeString();
       } else {
-        if (rExpTime) rExpTime.textContent = s === 0 ? "—" : "Expired";
-        if (rExpFill) rExpFill.style.width = "0%";
-        if (rExpText) rExpText.textContent = s === 0 ? "No active session access." : "Session access has ended.";
+        if (rT) rT.textContent = s === 0 ? '—' : 'Expired';
+        if (rF) rF.style.width = '0%';
+        if (rX) rX.textContent = s === 0 ? 'No active session access.' : 'Session access has ended.';
       }
     }
+    // Always keep currency amounts fresh
+    updateAllCurrencyDisplays();
   }
 
-  // Route on hash change
-  window.addEventListener("hashchange", function () {
-    var page = window.location.hash.replace("#", "") || "dashboard";
-    showPage(page);
+  window.addEventListener('hashchange', function() {
+    showPage(window.location.hash.replace('#','') || 'dashboard');
   });
 
-  // Route on load
-  window.addEventListener("DOMContentLoaded", function () {
-    var page = window.location.hash.replace("#", "") || "dashboard";
+  window.addEventListener('DOMContentLoaded', function() {
+    // Apply persisted theme immediately
+    applyTheme(currentTheme);
+    // Apply persisted currency
+    updateAllCurrencyDisplays();
+
+    var page = window.location.hash.replace('#','') || 'dashboard';
     showPage(page);
 
-    // Wire sidebar clicks
-    document.querySelectorAll(".nav-item[data-page]").forEach(function (el) {
-      el.addEventListener("click", function (e) {
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
         e.preventDefault();
-        showPage(el.getAttribute("data-page"));
+        showPage(el.getAttribute('data-page'));
       });
     });
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
 
-    // Mobile menu toggle
-    document.getElementById("menu-toggle").addEventListener("click", function () {
-      document.getElementById("sidebar").classList.toggle("open");
+    // System theme change listener
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+      if (currentTheme === 'system') applyTheme('system');
     });
   });
 
-  // Expose showPage globally so buttons inside sections can call it
   window.showPage = showPage;
 
-  // Payments simulate helper (self-contained here)
-  window.simulatePayment = function () {
-    var btn = document.getElementById("payments-send-btn");
-    var badge = document.getElementById("payments-status-badge");
-    var jordanStatus = document.getElementById("payments-jordan-status");
-    if (btn) { btn.textContent = "✅ Invoice Sent (Demo)"; btn.disabled = true; }
-    if (badge) { badge.textContent = "Sent"; badge.className = "tag green"; }
-    if (jordanStatus) { jordanStatus.textContent = "Sent"; jordanStatus.className = "tag green"; jordanStatus.style.padding = "1px 7px"; jordanStatus.style.fontSize = "10px"; }
-    if (window.showToast) window.showToast("success", "Invoice Sent (Demo)", "Payment request simulated. No real transaction.");
+  window.simulatePayment = function() {
+    var btn = document.getElementById('payments-send-btn');
+    var badge = document.getElementById('payments-status-badge');
+    var jordanStatus = document.getElementById('payments-jordan-status');
+    if (btn) { btn.textContent = '✅ Invoice Sent (Demo)'; btn.disabled = true; }
+    if (badge) { badge.textContent = 'Sent'; badge.className = 'tag green'; }
+    if (jordanStatus) { jordanStatus.textContent = 'Sent'; jordanStatus.className = 'tag green'; jordanStatus.style.padding = '1px 7px'; jordanStatus.style.fontSize = '10px'; }
+    if (window.showToast) window.showToast('success', 'Invoice Sent (Demo)', 'Payment request simulated. No real transaction.');
   };
 
 }());

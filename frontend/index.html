@@ -8,6 +8,29 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    /* ── SPA section visibility ── */
+    .page-section { display: none; flex-direction: column; gap: 24px; }
+    .page-section.active { display: flex; }
+
+    /* ── Section-local cards that mirror dashboard style ── */
+    .section-page-title {
+      font-size: 22px; font-weight: 800; color: var(--clr-text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-page-sub { font-size: 13px; color: var(--clr-text-2); margin-top: 4px; }
+
+    /* Settings table */
+    .settings-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 0; border-bottom: 1px solid var(--clr-border);
+      gap: 12px; flex-wrap: wrap;
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label { font-size: 13px; color: var(--clr-text-2); font-weight: 500; }
+    .settings-value { font-size: 13px; font-weight: 700; color: var(--clr-text); text-align: right; word-break: break-all; }
+    .settings-value.mono { font-family: monospace; font-size: 11px; }
+  </style>
 </head>
 <body>
 
@@ -26,29 +49,29 @@
   <nav class="sidebar-nav">
     <div class="nav-section-label">Main</div>
 
-    <a class="nav-item active" id="nav-dashboard" href="#" onclick="return false;">
+    <a class="nav-item active" data-page="dashboard" href="#dashboard">
       <span class="nav-icon">🏠</span> Dashboard
     </a>
-    <a class="nav-item" id="nav-appointments" href="#" onclick="return false;">
+    <a class="nav-item" data-page="appointments" href="#appointments">
       <span class="nav-icon">📅</span> Appointments
       <span class="nav-badge">3</span>
     </a>
-    <a class="nav-item" id="nav-clients" href="#" onclick="return false;">
+    <a class="nav-item" data-page="clients" href="#clients">
       <span class="nav-icon">👥</span> Clients
     </a>
-    <a class="nav-item" id="nav-records" href="#" onclick="return false;">
+    <a class="nav-item" data-page="records" href="#records">
       <span class="nav-icon">📋</span> Records
     </a>
 
     <div class="nav-section-label">Finance</div>
 
-    <a class="nav-item" id="nav-payments" href="#" onclick="return false;">
+    <a class="nav-item" data-page="payments" href="#payments">
       <span class="nav-icon">💳</span> Payments
     </a>
 
     <div class="nav-section-label">System</div>
 
-    <a class="nav-item" id="nav-settings" href="#" onclick="return false;">
+    <a class="nav-item" data-page="settings" href="#settings">
       <span class="nav-icon">⚙️</span> Settings
     </a>
   </nav>
@@ -73,7 +96,7 @@
   <header class="top-header">
     <div class="flex items-center gap-8">
       <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">☰</button>
-      <div class="header-title">Dashboard <span>/ Overview</span></div>
+      <div class="header-title" id="header-title">Dashboard <span>/ Overview</span></div>
     </div>
     <div class="header-right">
       <span id="demo-badge-header" class="demo-badge hidden">Demo Mode Active</span>
@@ -87,77 +110,614 @@
     </div>
   </header>
 
-  <!-- CONTENT AREA -->
+  <!-- CONTENT AREA — all sections live here -->
   <main class="content-area" id="main-content">
 
-    <!-- ── STAT CARDS ── -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon blue">📅</div>
-        <div>
-          <div class="stat-label">Today's Sessions</div>
-          <div class="stat-value">3</div>
-          <div class="stat-sub">2 completed · 1 upcoming</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon teal">👥</div>
-        <div>
-          <div class="stat-label">Active Clients</div>
-          <div class="stat-value">12</div>
-          <div class="stat-sub">All records secured</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green">✅</div>
-        <div>
-          <div class="stat-label">Consents Active</div>
-          <div class="stat-value" id="stat-consents">0</div>
-          <div class="stat-sub">Live blockchain records</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple">🔐</div>
-        <div>
-          <div class="stat-label">Records Verified</div>
-          <div class="stat-value">28</div>
-          <div class="stat-sub">Tamper-proof on-chain</div>
-        </div>
-      </div>
-    </div>
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: DASHBOARD
+         ══════════════════════════════════════════════════════ -->
+    <section id="dashboard-section" class="page-section active">
 
-    <!-- ── APPOINTMENTS + SLOTS ── -->
-    <div class="two-col">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">📅 Today's Appointments</span>
-          <span class="tag blue">Saturday, Oct 17</span>
+      <!-- STAT CARDS -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue">📅</div>
+          <div>
+            <div class="stat-label">Today's Sessions</div>
+            <div class="stat-value">3</div>
+            <div class="stat-sub">2 completed · 1 upcoming</div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="flex flex-wrap gap-8 mt-8">
-            <div style="flex:1; min-width:220px;">
-              <div class="section-heading" style="margin-bottom:10px;">Morning</div>
-              <div class="timeline">
-                <div class="timeline-item">
-                  <div class="timeline-dot con">🕙</div>
-                  <div class="timeline-body">
-                    <div class="timeline-event">Alex Rivera — CBT Session</div>
-                    <div class="timeline-time">10:00 AM · 60 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+        <div class="stat-card">
+          <div class="stat-icon teal">👥</div>
+          <div>
+            <div class="stat-label">Active Clients</div>
+            <div class="stat-value">12</div>
+            <div class="stat-sub">All records secured</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div>
+            <div class="stat-label">Consents Active</div>
+            <div class="stat-value" id="stat-consents">0</div>
+            <div class="stat-sub">Live blockchain records</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">🔐</div>
+          <div>
+            <div class="stat-label">Records Verified</div>
+            <div class="stat-value">28</div>
+            <div class="stat-sub">Tamper-proof on-chain</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPOINTMENTS + SLOTS -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📅 Today's Appointments</span>
+            <span class="tag blue">Saturday, Oct 17</span>
+          </div>
+          <div class="card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <div style="flex:1; min-width:220px;">
+                <div class="section-heading" style="margin-bottom:10px;">Morning</div>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-dot con">🕙</div>
+                    <div class="timeline-body">
+                      <div class="timeline-event">Alex Rivera — CBT Session</div>
+                      <div class="timeline-time">10:00 AM · 60 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot con">🕛</div>
+                    <div class="timeline-body">
+                      <div class="timeline-event">Morgan Patel — Anxiety Support</div>
+                      <div class="timeline-time">12:00 PM · 50 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot req">🕒</div>
+                    <div class="timeline-body">
+                      <div class="timeline-event">Jordan Kim — Initial Consult</div>
+                      <div class="timeline-time">3:00 PM · 45 min · <span class="tag warn" style="font-size:10px;padding:1px 7px;">Upcoming</span></div>
+                    </div>
                   </div>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot con">🕛</div>
-                  <div class="timeline-body">
-                    <div class="timeline-event">Morgan Patel — Anxiety Support</div>
-                    <div class="timeline-time">12:00 PM · 50 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
-                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🗓 Available Slots — This Week</span>
+            <span class="tag green">5 open</span>
+          </div>
+          <div class="card-body">
+            <div class="section-heading" style="margin-bottom:10px;">Mon – Fri</div>
+            <div class="slot-grid">
+              <div class="slot slot-booked">    <span class="slot-time">9:00 AM</span>  <span class="slot-label">Mon – Booked</span></div>
+              <div class="slot slot-available">  <span class="slot-time">11:00 AM</span> <span class="slot-label">Mon – Open</span></div>
+              <div class="slot slot-booked">    <span class="slot-time">2:00 PM</span>  <span class="slot-label">Tue – Booked</span></div>
+              <div class="slot slot-available">  <span class="slot-time">4:00 PM</span>  <span class="slot-label">Tue – Open</span></div>
+              <div class="slot slot-booked">    <span class="slot-time">10:00 AM</span> <span class="slot-label">Wed – Booked</span></div>
+              <div class="slot slot-available">  <span class="slot-time">1:00 PM</span>  <span class="slot-label">Wed – Open</span></div>
+              <div class="slot slot-available">  <span class="slot-time">3:00 PM</span>  <span class="slot-label">Thu – Open</span></div>
+              <div class="slot slot-booked">    <span class="slot-time">11:00 AM</span> <span class="slot-label">Fri – Booked</span></div>
+              <div class="slot slot-available">  <span class="slot-time">5:00 PM</span>  <span class="slot-label">Fri – Open</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENT PROFILE + CONSENT WORKFLOW -->
+      <div class="section-heading">Demo Client Workflow</div>
+      <div class="two-col">
+
+        <!-- CLIENT PROFILE -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">👤 Client Profile</span>
+            <span class="tag purple">Demo</span>
+          </div>
+          <div class="client-profile">
+            <div class="client-avatar">JD</div>
+            <div class="client-info">
+              <div class="client-name">Jordan Demo</div>
+              <div class="client-meta">DOB: Jan 15, 1990 · Client ID: #MV-0042</div>
+              <div class="client-tags">
+                <span class="tag blue">Active Client</span>
+                <span class="tag teal">CBT Protocol</span>
+                <span class="tag purple" id="client-role-tag">Awaiting Consent</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" style="padding-top:0;">
+            <div class="divider"></div>
+            <div class="record-hash-display">
+              <strong>🔒 Encrypted Record Hash</strong>
+              0x1234567890abcdef1234567890abcdef<br>1234567890abcdef1234567890abcdef
+            </div>
+            <div class="flex gap-8 mt-12 flex-wrap">
+              <div style="flex:1; min-width:120px;">
+                <div class="text-xs text-muted">Sessions Completed</div>
+                <div style="font-size:22px; font-weight:800; color:var(--clr-text);">14</div>
+              </div>
+              <div style="flex:1; min-width:120px;">
+                <div class="text-xs text-muted">Next Session</div>
+                <div style="font-size:16px; font-weight:700; color:var(--clr-primary);">3:00 PM Today</div>
+              </div>
+              <div style="flex:1; min-width:120px;">
+                <div class="text-xs text-muted">Insurance</div>
+                <div style="font-size:14px; font-weight:600;">BlueCross Demo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONSENT WORKFLOW -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🛡 Secure Record Access</span>
+            <span id="workflow-stage-badge" class="tag blue">Stage 1 of 4</span>
+          </div>
+          <div class="workflow-state">
+            <div>
+              <div class="text-xs text-muted" style="margin-bottom:6px;">Current Access Status</div>
+              <div id="access-status-pill" class="status-pill pill-idle">
+                <span class="dot"></span> No Access Requested
+              </div>
+            </div>
+            <div id="record-id-display" class="hidden">
+              <div class="text-xs text-muted" style="margin-bottom:4px;">Record ID (on-chain)</div>
+              <div class="record-hash-display" style="font-size:13px; padding:8px 12px;">
+                <span id="record-id-value" style="color:var(--clr-teal); font-weight:700;">#—</span>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <button id="btn-primary-action" class="btn btn-primary btn-full" onclick="primaryAction()">
+              🔓 Request Secure Access
+            </button>
+            <div class="flex gap-8 flex-wrap" id="secondary-actions">
+              <button id="btn-revoke" class="btn btn-error btn-sm hidden" onclick="revokeAccess()">
+                🚫 Revoke Access
+              </button>
+              <button id="btn-verify" class="btn btn-ghost btn-sm hidden" onclick="verifyAccess()">
+                🔍 Verify Access
+              </button>
+            </div>
+            <div id="status-message" class="text-xs text-muted hidden"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECORD VERIFICATION + EXPIRY + CONSENT -->
+      <div class="three-col">
+        <div class="card" id="card-verification">
+          <div class="card-header">
+            <span class="card-title">✅ Record Verified</span>
+          </div>
+          <div class="card-body">
+            <div id="verification-state">
+              <div class="status-pill pill-idle" id="verify-pill">
+                <span class="dot"></span> Not Verified
+              </div>
+              <div class="text-sm text-muted mt-8" id="verify-text">Request access first to verify the client's record on-chain.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="card-expiry">
+          <div class="card-header">
+            <span class="card-title">⏳ Access Expiry</span>
+          </div>
+          <div class="card-body">
+            <div id="expiry-state">
+              <div class="text-xs text-muted">Time Remaining</div>
+              <div style="font-size:28px; font-weight:800; color:var(--clr-text);" id="expiry-time">—</div>
+              <div class="expiry-bar" style="margin-top:10px;">
+                <div class="expiry-fill" id="expiry-fill" style="width:0%;"></div>
+              </div>
+              <div class="text-xs text-muted mt-8" id="expiry-text">No active session access.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="card-consent">
+          <div class="card-header">
+            <span class="card-title">🤝 Consent Status</span>
+          </div>
+          <div class="card-body">
+            <div class="status-pill pill-idle" id="consent-pill">
+              <span class="dot"></span> Awaiting Consent
+            </div>
+            <div class="text-sm text-muted mt-8" id="consent-text">Client consent has not been recorded yet.</div>
+            <div class="mt-12">
+              <button id="btn-approve-consent" class="btn btn-teal btn-sm btn-full hidden" onclick="approveConsent()">
+                ✅ Approve Consent (Client)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT CARD -->
+      <div class="payment-card" id="payment-card">
+        <div class="payment-header">
+          <div class="payment-title">💳 Payment Request <span class="tag warn" style="font-size:10px; margin-left:6px;">Demo Mode</span></div>
+          <span class="tag green">Session Complete</span>
+        </div>
+        <div class="payment-body">
+          <div class="flex items-center justify-between flex-wrap gap-8">
+            <div>
+              <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
+              <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
+              <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+            </div>
+            <button class="btn btn-success" onclick="requestPayment()">
+              💳 Send Invoice (Demo)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCESS HISTORY + BLOCKCHAIN PROOF -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🕐 Access History</span>
+            <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Clear</button>
+          </div>
+          <div class="card-body" style="padding-top:8px;">
+            <div class="timeline" id="access-timeline">
+              <div class="timeline-empty" id="timeline-empty">
+                <div class="empty-icon">📭</div>
+                No access events yet.<br><span class="text-xs">Events appear here as you step through the workflow.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proof-panel">
+          <div class="card-header">
+            <span class="card-title">⛓ Blockchain Proof</span>
+            <span id="proof-mode-badge" class="tag warn" style="font-size:10px;">Disconnected</span>
+          </div>
+          <div class="proof-grid">
+            <div class="proof-item">
+              <div class="proof-label">Contract Address</div>
+              <div class="proof-value highlight" id="proof-contract">0x5d72...046f</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-label">Network</div>
+              <div class="proof-value highlight">Polygon Amoy</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-label">Chain ID</div>
+              <div class="proof-value">80002</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-label">Access Status</div>
+              <div class="proof-value" id="proof-access-status">—</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-label">Record ID</div>
+              <div class="proof-value" id="proof-record-id">—</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-label">Access Expiry</div>
+              <div class="proof-value" id="proof-expiry">—</div>
+            </div>
+            <div class="proof-item" style="grid-column: 1 / -1;">
+              <div class="proof-label">Latest Transaction</div>
+              <div class="proof-value" id="proof-tx-hash">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /dashboard-section -->
+
+
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: APPOINTMENTS
+         ══════════════════════════════════════════════════════ -->
+    <section id="appointments-section" class="page-section">
+
+      <div>
+        <div class="section-page-title">📅 Appointments</div>
+        <div class="section-page-sub">Manage today's sessions and weekly availability.</div>
+      </div>
+
+      <div class="two-col">
+        <!-- Today's list -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📅 Today's Appointments</span>
+            <span class="tag blue">Saturday, Oct 17</span>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot con">🕙</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Alex Rivera — CBT Session</div>
+                  <div class="timeline-time">10:00 AM · 60 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot req">🕒</div>
-                  <div class="timeline-body">
-                    <div class="timeline-event">Jordan Kim — Initial Consult</div>
-                    <div class="timeline-time">3:00 PM · 45 min · <span class="tag warn" style="font-size:10px;padding:1px 7px;">Upcoming</span></div>
-                  </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot con">🕛</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Morgan Patel — Anxiety Support</div>
+                  <div class="timeline-time">12:00 PM · 50 min · <span class="tag green" style="font-size:10px;padding:1px 7px;">Completed</span></div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot req">🕒</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Jordan Kim — Initial Consult</div>
+                  <div class="timeline-time">3:00 PM · 45 min · <span class="tag warn" style="font-size:10px;padding:1px 7px;">Upcoming</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-16">
+              <button class="btn btn-primary btn-full" onclick="showToast('info','New Appointment','Booking is simulated in this prototype. (Demo Mode)')">
+                ＋ New Appointment <span class="tag warn" style="font-size:10px;margin-left:6px;">Demo Mode</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slots -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🗓 Weekly Availability</span>
+            <span class="tag green">5 open</span>
+          </div>
+          <div class="card-body">
+            <div class="section-heading" style="margin-bottom:12px;">Available Slots</div>
+            <div class="slot-grid">
+              <div class="slot slot-available"><span class="slot-time">11:00 AM</span><span class="slot-label">Mon – Open</span></div>
+              <div class="slot slot-available"><span class="slot-time">4:00 PM</span> <span class="slot-label">Tue – Open</span></div>
+              <div class="slot slot-available"><span class="slot-time">1:00 PM</span> <span class="slot-label">Wed – Open</span></div>
+              <div class="slot slot-available"><span class="slot-time">3:00 PM</span> <span class="slot-label">Thu – Open</span></div>
+              <div class="slot slot-available"><span class="slot-time">5:00 PM</span> <span class="slot-label">Fri – Open</span></div>
+            </div>
+            <div class="section-heading" style="margin-top:20px; margin-bottom:12px;">Booked Slots</div>
+            <div class="slot-grid">
+              <div class="slot slot-booked"><span class="slot-time">9:00 AM</span> <span class="slot-label">Mon – Booked</span></div>
+              <div class="slot slot-booked"><span class="slot-time">2:00 PM</span> <span class="slot-label">Tue – Booked</span></div>
+              <div class="slot slot-booked"><span class="slot-time">10:00 AM</span><span class="slot-label">Wed – Booked</span></div>
+              <div class="slot slot-booked"><span class="slot-time">11:00 AM</span><span class="slot-label">Fri – Booked</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /appointments-section -->
+
+
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: CLIENTS
+         ══════════════════════════════════════════════════════ -->
+    <section id="clients-section" class="page-section">
+
+      <div>
+        <div class="section-page-title">👥 Clients</div>
+        <div class="section-page-sub">Client profiles, consent status, and record access.</div>
+      </div>
+
+      <div class="two-col">
+        <!-- Demo Client card -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">👤 Jordan Demo</span>
+            <span class="tag purple">Demo Client</span>
+          </div>
+          <div class="client-profile">
+            <div class="client-avatar">JD</div>
+            <div class="client-info">
+              <div class="client-name">Jordan Demo</div>
+              <div class="client-meta">DOB: Jan 15, 1990 · Client ID: #MV-0042</div>
+              <div class="client-tags">
+                <span class="tag blue">Active</span>
+                <span class="tag teal">CBT Protocol</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" style="padding-top:0;">
+            <div class="divider"></div>
+            <div class="settings-row">
+              <span class="settings-label">Client Wallet</span>
+              <span class="settings-value mono" id="clients-wallet-display">0xc7156…b09f</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Sessions Completed</span>
+              <span class="settings-value">14</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Insurance</span>
+              <span class="settings-value">BlueCross Demo</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Next Session</span>
+              <span class="settings-value" style="color:var(--clr-primary);">3:00 PM Today</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consent / Access status -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🛡 Access &amp; Consent</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-row">
+              <span class="settings-label">Consent Status</span>
+              <span class="settings-value" id="clients-consent-status">Awaiting Consent</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Access Status</span>
+              <span class="settings-value" id="clients-access-status">No Access Requested</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Record Hash</span>
+              <span class="settings-value mono">0x1234…abcdef</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Access Expiry</span>
+              <span class="settings-value" id="clients-expiry">—</span>
+            </div>
+            <div class="divider"></div>
+            <button class="btn btn-primary btn-full" onclick="showPage('dashboard')">
+              🔓 Go to Consent Workflow →
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /clients-section -->
+
+
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: RECORDS
+         ══════════════════════════════════════════════════════ -->
+    <section id="records-section" class="page-section">
+
+      <div>
+        <div class="section-page-title">📋 Records</div>
+        <div class="section-page-sub">Encrypted therapy records. Contents remain off-chain and private.</div>
+      </div>
+
+      <div class="two-col">
+        <!-- Record card -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔒 Encrypted Record</span>
+            <span class="tag purple">Jordan Demo</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-row">
+              <span class="settings-label">Record Reference</span>
+              <span class="settings-value">REC-MV-0042-001</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Session Type</span>
+              <span class="settings-value">CBT · 60 min</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Date</span>
+              <span class="settings-value">Oct 17, 2026</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Access Status</span>
+              <span class="settings-value" id="records-access-status">No Access</span>
+            </div>
+            <div class="divider"></div>
+            <div class="record-hash-display">
+              <strong>🔒 Record Hash (on-chain)</strong>
+              0x1234567890abcdef1234567890abcdef<br>1234567890abcdef1234567890abcdef
+            </div>
+            <div style="margin-top:12px; padding:12px 14px; background:var(--clr-primary-l); border-radius:10px; border:1px solid var(--clr-primary); font-size:12px; color:var(--clr-primary-d); line-height:1.6;">
+              🔐 <strong>Record contents remain encrypted off-chain.</strong><br>
+              Only the hash is stored on the Polygon Amoy blockchain for tamper-proof verification.
+            </div>
+          </div>
+        </div>
+
+        <!-- Expiry + Verify -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⏳ Access &amp; Expiry</span>
+          </div>
+          <div class="card-body">
+            <div class="text-xs text-muted">Time Remaining</div>
+            <div style="font-size:28px; font-weight:800; color:var(--clr-text); margin:6px 0;" id="records-expiry-time">—</div>
+            <div class="expiry-bar">
+              <div class="expiry-fill" id="records-expiry-fill" style="width:0%;"></div>
+            </div>
+            <div class="text-xs text-muted mt-8" id="records-expiry-text">No active session access.</div>
+            <div class="divider"></div>
+            <button class="btn btn-ghost btn-full" onclick="showPage('dashboard'); setTimeout(verifyAccess, 300);">
+              🔍 Verify Record Access
+            </button>
+            <div class="mt-8">
+              <button class="btn btn-primary btn-full" onclick="showPage('dashboard')">
+                🔓 Request / Manage Access →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /records-section -->
+
+
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: PAYMENTS
+         ══════════════════════════════════════════════════════ -->
+    <section id="payments-section" class="page-section">
+
+      <div>
+        <div class="section-page-title">💳 Payments</div>
+        <div class="section-page-sub">Session invoices and payment status.</div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div style="padding:14px 18px; background:var(--clr-warn-l); border:1px solid #fcd34d; border-radius:12px; font-size:13px; color:#92400e; line-height:1.6;">
+        ⚠ <strong>Payments are simulated in this prototype.</strong> No real money is transferred. This screen is for demonstration purposes only.
+      </div>
+
+      <div class="two-col">
+        <!-- Pending invoice -->
+        <div class="payment-card visible" style="display:block;">
+          <div class="payment-header">
+            <div class="payment-title">💳 Session Invoice <span class="tag warn" style="font-size:10px;margin-left:6px;">Demo Mode</span></div>
+            <span class="tag warn" id="payments-status-badge">Pending</span>
+          </div>
+          <div class="payment-body">
+            <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
+            <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
+            <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+            <div class="mt-16">
+              <button class="btn btn-success btn-full" id="payments-send-btn" onclick="simulatePayment()">
+                💳 Send Invoice (Demo)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment history -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📜 Payment History</span>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot pay">💳</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Alex Rivera — CBT Session</div>
+                  <div class="timeline-time">Oct 17 · $180.00 · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot pay">💳</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Morgan Patel — Anxiety Support</div>
+                  <div class="timeline-time">Oct 17 · $150.00 · <span class="tag green" style="font-size:10px;padding:1px 7px;">Paid</span></div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot req">⏳</div>
+                <div class="timeline-body">
+                  <div class="timeline-event">Jordan Demo — CBT Session</div>
+                  <div class="timeline-time">Oct 17 · $180.00 · <span class="tag warn" style="font-size:10px;padding:1px 7px;" id="payments-jordan-status">Pending</span></div>
                 </div>
               </div>
             </div>
@@ -165,255 +725,81 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">🗓 Available Slots — This Week</span>
-          <span class="tag green">5 open</span>
-        </div>
-        <div class="card-body">
-          <div class="section-heading" style="margin-bottom:10px;">Mon – Fri</div>
-          <div class="slot-grid">
-            <div class="slot slot-booked">    <span class="slot-time">9:00 AM</span>  <span class="slot-label">Mon – Booked</span></div>
-            <div class="slot slot-available">  <span class="slot-time">11:00 AM</span> <span class="slot-label">Mon – Open</span></div>
-            <div class="slot slot-booked">    <span class="slot-time">2:00 PM</span>  <span class="slot-label">Tue – Booked</span></div>
-            <div class="slot slot-available">  <span class="slot-time">4:00 PM</span>  <span class="slot-label">Tue – Open</span></div>
-            <div class="slot slot-booked">    <span class="slot-time">10:00 AM</span> <span class="slot-label">Wed – Booked</span></div>
-            <div class="slot slot-available">  <span class="slot-time">1:00 PM</span>  <span class="slot-label">Wed – Open</span></div>
-            <div class="slot slot-available">  <span class="slot-time">3:00 PM</span>  <span class="slot-label">Thu – Open</span></div>
-            <div class="slot slot-booked">    <span class="slot-time">11:00 AM</span> <span class="slot-label">Fri – Booked</span></div>
-            <div class="slot slot-available">  <span class="slot-time">5:00 PM</span>  <span class="slot-label">Fri – Open</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section><!-- /payments-section -->
 
-    <!-- ── CLIENT PROFILE + CONSENT WORKFLOW ── -->
-    <div class="section-heading">Demo Client Workflow</div>
-    <div class="two-col">
 
-      <!-- CLIENT PROFILE -->
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">👤 Client Profile</span>
-          <span class="tag purple">Demo</span>
-        </div>
-        <div class="client-profile">
-          <div class="client-avatar">JD</div>
-          <div class="client-info">
-            <div class="client-name">Jordan Demo</div>
-            <div class="client-meta">DOB: Jan 15, 1990 · Client ID: #MV-0042</div>
-            <div class="client-tags">
-              <span class="tag blue">Active Client</span>
-              <span class="tag teal">CBT Protocol</span>
-              <span class="tag purple" id="client-role-tag">Awaiting Consent</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-body" style="padding-top:0;">
-          <div class="divider"></div>
-          <div class="record-hash-display">
-            <strong>🔒 Encrypted Record Hash</strong>
-            0x1234567890abcdef1234567890abcdef<br>1234567890abcdef1234567890abcdef
-          </div>
-          <div class="flex gap-8 mt-12 flex-wrap">
-            <div style="flex:1; min-width:120px;">
-              <div class="text-xs text-muted">Sessions Completed</div>
-              <div style="font-size:22px; font-weight:800; color:var(--clr-text);">14</div>
-            </div>
-            <div style="flex:1; min-width:120px;">
-              <div class="text-xs text-muted">Next Session</div>
-              <div style="font-size:16px; font-weight:700; color:var(--clr-primary);">3:00 PM Today</div>
-            </div>
-            <div style="flex:1; min-width:120px;">
-              <div class="text-xs text-muted">Insurance</div>
-              <div style="font-size:14px; font-weight:600;">BlueCross Demo</div>
-            </div>
-          </div>
-        </div>
+    <!-- ══════════════════════════════════════════════════════
+         SECTION: SETTINGS
+         ══════════════════════════════════════════════════════ -->
+    <section id="settings-section" class="page-section">
+
+      <div>
+        <div class="section-page-title">⚙️ Settings</div>
+        <div class="section-page-sub">Wallet, network, and application configuration.</div>
       </div>
 
-      <!-- CONSENT WORKFLOW -->
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">🛡 Secure Record Access</span>
-          <span id="workflow-stage-badge" class="tag blue">Stage 1 of 4</span>
-        </div>
-        <div class="workflow-state">
-
-          <!-- Current status -->
-          <div>
-            <div class="text-xs text-muted" style="margin-bottom:6px;">Current Access Status</div>
-            <div id="access-status-pill" class="status-pill pill-idle">
-              <span class="dot"></span> No Access Requested
+      <div class="two-col">
+        <!-- Wallet & Role -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🦊 Wallet &amp; Role</span>
+          </div>
+          <div class="card-body">
+            <div class="settings-row">
+              <span class="settings-label">Connected Address</span>
+              <span class="settings-value mono" id="settings-address">Not connected</span>
             </div>
-          </div>
-
-          <!-- Record ID display -->
-          <div id="record-id-display" class="hidden">
-            <div class="text-xs text-muted" style="margin-bottom:4px;">Record ID (on-chain)</div>
-            <div class="record-hash-display" style="font-size:13px; padding:8px 12px;">
-              <span id="record-id-value" style="color:var(--clr-teal); font-weight:700;">#—</span>
+            <div class="settings-row">
+              <span class="settings-label">Detected Role</span>
+              <span class="settings-value" id="settings-role">—</span>
             </div>
-          </div>
-
-          <!-- Divider -->
-          <div class="divider"></div>
-
-          <!-- PRIMARY ACTION BUTTON -->
-          <button id="btn-primary-action" class="btn btn-primary btn-full" onclick="primaryAction()">
-            🔓 Request Secure Access
-          </button>
-
-          <!-- SECONDARY BUTTONS -->
-          <div class="flex gap-8 flex-wrap" id="secondary-actions">
-            <button id="btn-revoke" class="btn btn-error btn-sm hidden" onclick="revokeAccess()">
-              🚫 Revoke Access
-            </button>
-            <button id="btn-verify" class="btn btn-ghost btn-sm hidden" onclick="verifyAccess()">
-              🔍 Verify Access
-            </button>
-          </div>
-
-          <!-- Status message -->
-          <div id="status-message" class="text-xs text-muted hidden"></div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- ── RECORD VERIFICATION + EXPIRY + PROOF ── -->
-    <div class="three-col">
-
-      <!-- Record Verification -->
-      <div class="card" id="card-verification">
-        <div class="card-header">
-          <span class="card-title">✅ Record Verified</span>
-        </div>
-        <div class="card-body">
-          <div id="verification-state">
-            <div class="status-pill pill-idle" id="verify-pill">
-              <span class="dot"></span> Not Verified
+            <div class="settings-row">
+              <span class="settings-label">Demo Mode</span>
+              <span class="settings-value" id="settings-demo">Inactive</span>
             </div>
-            <div class="text-sm text-muted mt-8" id="verify-text">Request access first to verify the client's record on-chain.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Access Expiry -->
-      <div class="card" id="card-expiry">
-        <div class="card-header">
-          <span class="card-title">⏳ Access Expiry</span>
-        </div>
-        <div class="card-body">
-          <div id="expiry-state">
-            <div class="text-xs text-muted">Time Remaining</div>
-            <div style="font-size:28px; font-weight:800; color:var(--clr-text);" id="expiry-time">—</div>
-            <div class="expiry-bar" style="margin-top:10px;">
-              <div class="expiry-fill" id="expiry-fill" style="width:0%;"></div>
-            </div>
-            <div class="text-xs text-muted mt-8" id="expiry-text">No active session access.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Consent Status -->
-      <div class="card" id="card-consent">
-        <div class="card-header">
-          <span class="card-title">🤝 Consent Status</span>
-        </div>
-        <div class="card-body">
-          <div class="status-pill pill-idle" id="consent-pill">
-            <span class="dot"></span> Awaiting Consent
-          </div>
-          <div class="text-sm text-muted mt-8" id="consent-text">Client consent has not been recorded yet.</div>
-          <div class="mt-12">
-            <button id="btn-approve-consent" class="btn btn-teal btn-sm btn-full hidden" onclick="approveConsent()">
-              ✅ Approve Consent (Client)
+            <div class="divider"></div>
+            <button class="btn btn-primary btn-full" onclick="connectWallet()">
+              🦊 Connect / Reconnect Wallet
             </button>
           </div>
         </div>
-      </div>
 
-    </div>
-
-    <!-- ── PAYMENT CARD (appears after session complete) ── -->
-    <div class="payment-card" id="payment-card">
-      <div class="payment-header">
-        <div class="payment-title">💳 Payment Request <span class="tag warn" style="font-size:10px; margin-left:6px;">Demo Mode</span></div>
-        <span class="tag green">Session Complete</span>
-      </div>
-      <div class="payment-body">
-        <div class="flex items-center justify-between flex-wrap gap-8">
-          <div>
-            <div class="payment-amount"><span>$</span>180<span style="font-size:18px;">.00</span></div>
-            <div class="payment-meta">Session Fee · Jordan Demo · Oct 17, 2026 · 60 min CBT</div>
-            <div class="payment-meta" style="margin-top:4px;">Insurance: BlueCross Demo (covers 80%) — Patient owes: <strong>$36.00</strong></div>
+        <!-- Network & Contract -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⛓ Network &amp; Contract</span>
           </div>
-          <button class="btn btn-success" onclick="requestPayment()">
-            💳 Send Invoice (Demo)
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── ACCESS HISTORY + BLOCKCHAIN PROOF ── -->
-    <div class="two-col">
-
-      <!-- ACCESS HISTORY TIMELINE -->
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">🕐 Access History</span>
-          <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Clear</button>
-        </div>
-        <div class="card-body" style="padding-top:8px;">
-          <div class="timeline" id="access-timeline">
-            <div class="timeline-empty" id="timeline-empty">
-              <div class="empty-icon">📭</div>
-              No access events yet.<br><span class="text-xs">Events appear here as you step through the workflow.</span>
+          <div class="card-body">
+            <div class="settings-row">
+              <span class="settings-label">Network</span>
+              <span class="settings-value" style="color:var(--clr-teal-d);">Polygon Amoy Testnet</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Chain ID</span>
+              <span class="settings-value">80002</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Contract Address</span>
+              <span class="settings-value mono">
+                <a href="https://amoy.polygonscan.com/address/0x5d721854efe4916607f3ea57a4d2afc603df046f"
+                   target="_blank" style="color:var(--clr-primary); text-decoration:none;">
+                  0x5d721854…df046f ↗
+                </a>
+              </span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">Gas (Priority Fee)</span>
+              <span class="settings-value">30 Gwei (Amoy minimum)</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-label">ethers.js</span>
+              <span class="settings-value">v6.13.2 (CDN)</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BLOCKCHAIN PROOF PANEL -->
-      <div class="proof-panel">
-        <div class="card-header">
-          <span class="card-title">⛓ Blockchain Proof</span>
-          <span id="proof-mode-badge" class="tag warn" style="font-size:10px;">Disconnected</span>
-        </div>
-        <div class="proof-grid">
-          <div class="proof-item">
-            <div class="proof-label">Contract Address</div>
-            <div class="proof-value highlight" id="proof-contract">0x5d72...046f</div>
-          </div>
-          <div class="proof-item">
-            <div class="proof-label">Network</div>
-            <div class="proof-value highlight">Polygon Amoy</div>
-          </div>
-          <div class="proof-item">
-            <div class="proof-label">Chain ID</div>
-            <div class="proof-value">80002</div>
-          </div>
-          <div class="proof-item">
-            <div class="proof-label">Access Status</div>
-            <div class="proof-value" id="proof-access-status">—</div>
-          </div>
-          <div class="proof-item">
-            <div class="proof-label">Record ID</div>
-            <div class="proof-value" id="proof-record-id">—</div>
-          </div>
-          <div class="proof-item">
-            <div class="proof-label">Access Expiry</div>
-            <div class="proof-value" id="proof-expiry">—</div>
-          </div>
-          <div class="proof-item" style="grid-column: 1 / -1;">
-            <div class="proof-label">Latest Transaction</div>
-            <div class="proof-value" id="proof-tx-hash">—</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    </section><!-- /settings-section -->
 
   </main><!-- /content-area -->
 </div><!-- /main-wrapper -->
@@ -440,7 +826,7 @@
     </div>
     <div class="modal-body">
       <p class="text-sm" style="color:var(--clr-text-2); margin-bottom:16px; line-height:1.6;">
-        <strong>Jordan Demo</strong> is being asked to grant access to their encrypted therapy record. 
+        <strong>Jordan Demo</strong> is being asked to grant access to their encrypted therapy record.
         This consent will be permanently recorded on the Polygon blockchain.
       </p>
       <div class="info-row">
@@ -462,7 +848,7 @@
       <div style="margin-top:16px; padding:12px 16px; background:var(--clr-warn-l); border-radius:10px; border:1px solid #fcd34d;">
         <div class="text-sm" style="color:#92400e; font-weight:600;">⚠ Important</div>
         <div class="text-xs" style="color:#92400e; margin-top:4px; line-height:1.6;">
-          By approving, you authorise this therapist to access your encrypted record for the stated duration. 
+          By approving, you authorise this therapist to access your encrypted record for the stated duration.
           This action is irreversible on-chain.
         </div>
       </div>
@@ -484,5 +870,160 @@
      ============================================================ -->
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 <script src="app.js"></script>
+
+<!-- ============================================================
+     SPA ROUTER  (hash-based, no libraries)
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+
+  const PAGES = ["dashboard", "appointments", "clients", "records", "payments", "settings"];
+
+  const PAGE_TITLES = {
+    dashboard:    "Dashboard <span>/ Overview</span>",
+    appointments: "Appointments <span>/ Schedule</span>",
+    clients:      "Clients <span>/ Profiles</span>",
+    records:      "Records <span>/ Encrypted Files</span>",
+    payments:     "Payments <span>/ Invoices</span>",
+    settings:     "Settings <span>/ Configuration</span>",
+  };
+
+  function showPage(page) {
+    if (!PAGES.includes(page)) page = "dashboard";
+
+    // Hide all sections
+    PAGES.forEach(function (p) {
+      var sec = document.getElementById(p + "-section");
+      if (sec) sec.classList.remove("active");
+    });
+
+    // Show target
+    var target = document.getElementById(page + "-section");
+    if (target) target.classList.add("active");
+
+    // Update sidebar active state
+    document.querySelectorAll(".nav-item").forEach(function (el) {
+      el.classList.toggle("active", el.getAttribute("data-page") === page);
+    });
+
+    // Update header title
+    var titleEl = document.getElementById("header-title");
+    if (titleEl) titleEl.innerHTML = PAGE_TITLES[page] || page;
+
+    // Update hash without triggering hashchange again
+    if (window.location.hash !== "#" + page) {
+      history.replaceState(null, "", "#" + page);
+    }
+
+    // Sync dynamic values into secondary sections
+    syncSectionData(page);
+
+    // Close mobile sidebar
+    document.getElementById("sidebar").classList.remove("open");
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }
+
+  // Keep secondary sections in sync with live state from app.js
+  function syncSectionData(page) {
+    // Settings section
+    if (page === "settings") {
+      var addrEl = document.getElementById("settings-address");
+      var roleEl = document.getElementById("settings-role");
+      var demoEl = document.getElementById("settings-demo");
+      if (addrEl) addrEl.textContent = (window.state && window.state.address) ? window.state.address : "Not connected";
+      if (roleEl) {
+        var roleMap = { therapist: "👨‍⚕️ Therapist", client: "👤 Client", admin: "🛡 Admin" };
+        roleEl.textContent = (window.state && window.state.role) ? (roleMap[window.state.role] || window.state.role) : "—";
+      }
+      if (demoEl) demoEl.textContent = (window.state && window.state.demoMode) ? "🎭 Active" : "Inactive";
+    }
+
+    // Clients section
+    if (page === "clients") {
+      var stageLabels = ["No Access Requested", "Access Requested", "Consent Active ✅", "Session Completed", "Access Revoked"];
+      var consentLabels = ["Awaiting Consent", "Awaiting Consent", "Approved ✅", "Closed", "Closed"];
+      var stage = (window.state) ? window.state.stage : 0;
+      var cAccess = document.getElementById("clients-access-status");
+      var cConsent = document.getElementById("clients-consent-status");
+      var cExpiry = document.getElementById("clients-expiry");
+      if (cAccess)  cAccess.textContent  = stageLabels[stage]  || "—";
+      if (cConsent) cConsent.textContent = consentLabels[stage] || "—";
+      if (cExpiry && window.state && window.state.expiryEnd && window.state.expiryEnd > Date.now()) {
+        cExpiry.textContent = new Date(window.state.expiryEnd).toLocaleTimeString();
+      } else if (cExpiry) {
+        cExpiry.textContent = stage === 0 ? "—" : "Expired / Closed";
+      }
+    }
+
+    // Records section — mirror expiry bar
+    if (page === "records") {
+      var stageMap = ["No Access", "Requested", "Active ✅", "Completed", "Revoked"];
+      var rStatus = document.getElementById("records-access-status");
+      var rExpTime = document.getElementById("records-expiry-time");
+      var rExpFill = document.getElementById("records-expiry-fill");
+      var rExpText = document.getElementById("records-expiry-text");
+      var s = (window.state) ? window.state.stage : 0;
+      if (rStatus) rStatus.textContent = stageMap[s] || "—";
+      if (window.state && window.state.expiryEnd && window.state.expiryEnd > Date.now()) {
+        var rem = window.state.expiryEnd - Date.now();
+        var total = window.state.expiryEnd - window.state.expiryStart;
+        var pct = Math.max(0, Math.min(100, (rem / total) * 100));
+        var mins = Math.floor(rem / 60000);
+        var secs = Math.floor((rem % 60000) / 1000);
+        if (rExpTime) rExpTime.textContent = String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0");
+        if (rExpFill) rExpFill.style.width = pct + "%";
+        if (rExpText) rExpText.textContent = "Active until " + new Date(window.state.expiryEnd).toLocaleTimeString();
+      } else {
+        if (rExpTime) rExpTime.textContent = s === 0 ? "—" : "Expired";
+        if (rExpFill) rExpFill.style.width = "0%";
+        if (rExpText) rExpText.textContent = s === 0 ? "No active session access." : "Session access has ended.";
+      }
+    }
+  }
+
+  // Route on hash change
+  window.addEventListener("hashchange", function () {
+    var page = window.location.hash.replace("#", "") || "dashboard";
+    showPage(page);
+  });
+
+  // Route on load
+  window.addEventListener("DOMContentLoaded", function () {
+    var page = window.location.hash.replace("#", "") || "dashboard";
+    showPage(page);
+
+    // Wire sidebar clicks
+    document.querySelectorAll(".nav-item[data-page]").forEach(function (el) {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        showPage(el.getAttribute("data-page"));
+      });
+    });
+
+    // Mobile menu toggle
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
+  });
+
+  // Expose showPage globally so buttons inside sections can call it
+  window.showPage = showPage;
+
+  // Payments simulate helper (self-contained here)
+  window.simulatePayment = function () {
+    var btn = document.getElementById("payments-send-btn");
+    var badge = document.getElementById("payments-status-badge");
+    var jordanStatus = document.getElementById("payments-jordan-status");
+    if (btn) { btn.textContent = "✅ Invoice Sent (Demo)"; btn.disabled = true; }
+    if (badge) { badge.textContent = "Sent"; badge.className = "tag green"; }
+    if (jordanStatus) { jordanStatus.textContent = "Sent"; jordanStatus.className = "tag green"; jordanStatus.style.padding = "1px 7px"; jordanStatus.style.fontSize = "10px"; }
+    if (window.showToast) window.showToast("success", "Invoice Sent (Demo)", "Payment request simulated. No real transaction.");
+  };
+
+}());
+</script>
 </body>
 </html>

@@ -1048,16 +1048,5 @@ function shortAddr(addr, chars) {
   return `${addr.slice(0, c + 2)}…${addr.slice(-4)}`;
 }
 
-// ============================================================
-// NAV (visual only — single-page dashboard)
-// ============================================================
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".nav-item").forEach(item => {
-    item.addEventListener("click", () => {
-      document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
-      item.classList.add("active");
-      // Close mobile menu
-      document.getElementById("sidebar").classList.remove("open");
-    });
-  });
-});
+// Navigation and mobile menu are handled by the SPA router in index.html.
+

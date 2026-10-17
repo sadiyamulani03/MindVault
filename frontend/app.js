@@ -27,6 +27,14 @@ const CHAIN_ID_HEX      = "0x13882";
 const RPC_URL           = "https://rpc-amoy.polygon.technology/";
 const EXPLORER_URL      = "https://amoy.polygonscan.com";
 
+// Polygon Amoy enforces a minimum gas tip cap of 25 Gwei.
+// ethers.js v6 auto-detects ~1.5 Gwei from the RPC, which causes
+// "transaction gas price below minimum" rejection. Set explicitly.
+const AMOY_GAS = {
+  maxPriorityFeePerGas: 30_000_000_000n, // 30 Gwei (above 25 Gwei minimum)
+  maxFeePerGas:         60_000_000_000n, // 60 Gwei cap
+};
+
 const POLYGON_AMOY_PARAMS = {
   chainId: CHAIN_ID_HEX,
   chainName: "Polygon Amoy Testnet",
@@ -329,7 +337,7 @@ async function doRequestAccess() {
       clientChecksummed,
       RECORD_HASH,
       ACCESS_DURATION,
-      { gasLimit }
+      { gasLimit, ...AMOY_GAS }
     );
 
     setLoading(true, "Transaction Sent", "Waiting for blockchain confirmation…");
@@ -387,7 +395,7 @@ async function approveConsent() {
 
   setLoading(true, "Approving Consent", "Client is approving on the blockchain…");
   try {
-    const tx = await state.contract.approveConsent(state.recordId);
+    const tx = await state.contract.approveConsent(state.recordId, { ...AMOY_GAS });
     setLoading(true, "Transaction Sent", "Waiting for confirmation…");
     showToast("info", "Transaction Pending", `Tx: ${shortAddr(tx.hash)}`);
 
@@ -423,7 +431,7 @@ async function doCompleteSession() {
 
   setLoading(true, "Completing Session", "Recording session completion on-chain…");
   try {
-    const tx = await state.contract.completeSession(state.recordId);
+    const tx = await state.contract.completeSession(state.recordId, { ...AMOY_GAS });
     setLoading(true, "Transaction Sent", "Waiting for confirmation…");
     showToast("info", "Transaction Pending", `Tx: ${shortAddr(tx.hash)}`);
 
@@ -454,7 +462,7 @@ async function revokeAccess() {
 
   setLoading(true, "Revoking Access", "Sending revoke transaction…");
   try {
-    const tx = await state.contract.revokeAccess(state.recordId);
+    const tx = await state.contract.revokeAccess(state.recordId, { ...AMOY_GAS });
     showToast("info", "Transaction Pending", `Tx: ${shortAddr(tx.hash)}`);
     await tx.wait();
 

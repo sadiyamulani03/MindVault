@@ -20,7 +20,7 @@ const CLIENT_ADDRESS    = "0xc7156D6Da292D80d7Bc77A9da898FC0DC154b09f".toLowerCa
 // NOTE: Replace with your actual client wallet address before going live
 
 const RECORD_HASH       = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
-const ACCESS_DURATION   = 3600; // seconds (1 hour)
+const ACCESS_DURATION   = 3600n; // uint64 — use BigInt so ethers.js v6 encodes it unambiguously
 
 const CHAIN_ID          = 80002n; // Polygon Amoy
 const CHAIN_ID_HEX      = "0x13882";
@@ -302,8 +302,10 @@ async function doRequestAccess() {
 
   setLoading(true, "Requesting Secure Access", "Awaiting MetaMask confirmation…");
   try {
+    // ethers.getAddress() applies EIP-55 checksum — avoids InvalidClient revert
+    const clientChecksummed = ethers.getAddress(CLIENT_ADDRESS);
     const tx = await state.contract.requestAccess(
-      CLIENT_ADDRESS,
+      clientChecksummed,
       RECORD_HASH,
       ACCESS_DURATION
     );
@@ -916,14 +918,40 @@ function closeConsentModal() {
 // ============================================================
 function handleContractError(err, fnName) {
   console.error(`[${fnName}]`, err);
-  const msg = err?.reason || err?.message || "Unknown error";
 
-  if (err.code === 4001 || msg.toLowerCase().includes("rejected")) {
+  // User rejected the tx in MetaMask
+  if (err.code === 4001 || err.code === "ACTION_REJECTED") {
     showToast("warning", "Transaction Rejected", "You rejected the transaction in MetaMask.");
     return;
   }
 
-  showToast("error", `Contract Error (${fnName})`, msg.slice(0, 140));
+  // Decode ethers.js v6 custom Solidity errors (err.revert) or raw reason string
+  let msg = "Unknown error";
+  if (err.revert && err.revert.name) {
+    // Custom error decoded by ethers v6
+    msg = `Revert: ${err.revert.name}`;
+    if (err.revert.args && err.revert.args.length > 0) {
+      msg += ` (${err.revert.args.join(", ")})`;
+    }
+  } else if (err.reason) {
+    msg = err.reason;
+  } else if (err.shortMessage) {
+    // ethers v6 shortMessage is human-readable
+    msg = err.shortMessage;
+  } else if (err.message) {
+    // Strip the raw JSON from MetaMask error messages for readability
+    msg = err.message.replace(/\s*\(action=.*\)/s, "").slice(0, 160);
+  }
+
+  // Also try to decode from raw data if available
+  if (msg === "Unknown error" && err.data && state.contract) {
+    try {
+      const decoded = state.contract.interface.parseError(err.data);
+      if (decoded) msg = `Revert: ${decoded.name}`;
+    } catch { /* not a known custom error */ }
+  }
+
+  showToast("error", `Contract Error — ${fnName}`, msg.slice(0, 180));
 
   if (!state.demoMode) {
     showToast("info", "Switching to Demo Mode", "Continuing with simulated workflow.");

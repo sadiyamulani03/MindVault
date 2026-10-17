@@ -210,6 +210,14 @@ See [test-checklist.md](test-checklist.md) for the full manual test plan using t
 Blockchain Technology Undergraduate  
 - GitHub: https://github.com/sadiyamulani03
 
+## 📚 Documentation
+
+- [Architecture](docs/architecture.md)
+- [Demo Script](docs/demo-script.md)
+- [Deployment Guide](docs/deployment-guide.md)
+- [Security Limitations](docs/security-limitations.md)
+- [Test Plan](docs/test-plan.md)
+
 ## License
 
 MIT License.

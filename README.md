@@ -2,7 +2,7 @@
 
 Privacy-first workspace for solo therapists with client-controlled, time-limited access to therapy-record references.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-YOUR__VERCEL__URL-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://YOUR_VERCEL_URL)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-mindvault--one--lemon.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://mindvault-one-lemon.vercel.app/)
 [![Polygon Amoy](https://img.shields.io/badge/Network-Polygon_Amoy-8247E5?style=for-the-badge&logo=polygon&logoColor=white)](https://amoy.polygonscan.com)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20%2B-363636?style=for-the-badge&logo=solidity&logoColor=white)](https://soliditylang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
@@ -11,7 +11,7 @@ Privacy-first workspace for solo therapists with client-controlled, time-limited
 
 | Item | Link |
 |---|---|
-| Live Demo | YOUR_VERCEL_URL |
+| Live Demo | https://mindvault-one-lemon.vercel.app/ |
 | Deployed Contract | https://amoy.polygonscan.com/address/0x5d721854efe4916607f3ea57a4d2afc603df046f |
 | Contract Address | `0x5d721854efe4916607f3ea57a4d2afc603df046f` |
 | Network | Polygon Amoy Testnet |
